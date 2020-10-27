@@ -22,6 +22,7 @@ part 'app/splash.controller.dart';
 part 'app/welcome.screen.dart';
 part 'app/welcome.controller.dart';
 part 'extensions/hex.extension.dart';
-part 'services/auth.service.dart';
-
 part 'models/auth.model.dart';
+part 'app/auth.screen.dart';
+
+part 'app/auth.controller.dart';

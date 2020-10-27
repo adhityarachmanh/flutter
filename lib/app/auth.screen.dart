@@ -1,13 +1,13 @@
 part of '../app.dart';
 
-class WelcomeScreen extends StatelessWidget {
-  static final routeName = "/welcome";
+class AuthScreen extends StatelessWidget {
+  static final routeName = "/AuthScreen";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         child: Center(
-          child: Text("Welcome Screen"),
+          child: Text("AuthScreen"),
         ),
       ),
     );
