@@ -1,36 +1,54 @@
 part of '../app.dart';
 
 class SplashScreen extends StatelessWidget {
-    static final routeName = "/";
+  static final routeName = "/";
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    final state = Provider.of<SplashController>(context);
+    final controller = Provider.of<SplashController>(context, listen: false);
+    final route = Provider.of<RouteFunction>(context, listen: false);
+    controller.init(context);
     return Scaffold(
-      backgroundColor: HexColor.fromHex("#ea5252"),
-      body: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
-                  colors: [
-                Colors.blue[500],
-                Colors.blue[800],
-              ],
-                  stops: [
-                0.4,
-                0.9
-              ])),
-          child: Center(
-              child: GestureDetector(
-                onTap: (){
-                  Provider.of<RouteFunction>(context,listen: false).navigateToAndRemoveUntil(WelcomeScreen.routeName);
-                },
-                              child: Text(
-            "Loading",
-            maxLines: 1,
-            style:
-                  textFontFS.copyWith(fontWeight: FontWeight.bold, fontSize: 30),
-          ),
-              ))),
-    );
+        backgroundColor: primaryColor.withAlpha(75),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Spacer(),
+            Container(
+              width: SizeConfig.screenWidth / 1.5,
+              height: SizeConfig.screenHeight / 2,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset("assets/images/note.png"),
+                  Text(
+                    "Musical",
+                    style:
+                        textFontFS.copyWith(fontSize: 30, letterSpacing: 10),
+                  ),
+                  SizedBox(
+                    height: defaultMargin,
+                  ),
+                  SpinKitWave(
+                    color: Colors.white,
+                    size: defaultMargin / 1.5,
+                  ),
+                ],
+              ),
+            ),
+            Spacer(),
+            Padding(
+              padding:  EdgeInsets.symmetric(horizontal:defaultMargin/1.5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(config.creator,style: textFontFS.copyWith(fontWeight: FontWeight.bold,letterSpacing: defaultMargin/4))
+                  ],
+              ),
+            ),
+            SizedBox(height: defaultMargin/1.5,)
+          ],
+        ));
   }
 }

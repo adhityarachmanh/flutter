@@ -19,7 +19,6 @@ class Main extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         navigatorKey: Provider.of<RouteFunction>(context).navigationKey,
         initialRoute: SplashScreen.routeName,
-        routes:routes
-        );
+        routes: routes);
   }
 }

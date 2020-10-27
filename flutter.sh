@@ -3,27 +3,30 @@
 # upd : arh 
 # ver : 1.0
 
+
+
 modelsEX="""
-class Example extends Equatable {
+class ExampleModel extends Equatable {
 
-    Example();
+    ExampleModel();
 
-    factory Example.fromJson(Map<String, dynamic> json) {
-        return Example();
+    factory ExampleModel.fromJson(Map<String, dynamic> json) {
+        return ExampleModel();
     }
     Map<String, dynamic> toJson() {
         return {};
     }
 
-    Example copyWith() => Example();
+    ExampleModel copyWith() => ExampleModel();
 
     @override
     List<Object> get props => [];
 }
 """
+
 serviceEX="""
-class Example {
-    static Future<ResponseAPI> futureExample() async {
+class ExampleService {
+    static Future<ResponseAPI> example() async {
         try {
             // GET : var client = await rest.get('URL',{});
             var client = await rest.put('URL',{},{});
@@ -40,14 +43,18 @@ class Example {
 """
 
 screenEX='''
-class Example extends StatelessWidget {
-  static final routeName = "/Example";
+class ExampleScreen extends StatelessWidget {
+  static final routeName = "/ExampleScreen";
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    final state = Provider.of<ExampleController>(context);
+    final controller = Provider.of<ExampleController>(context, listen: false);
+    final route = Provider.of<RouteFunction>(context, listen: false);
     return Scaffold(
       body: Container(
         child: Center(
-          child: Text("Example"),
+          child: Text("ExampleScreen"),
         ),
       ),
     );
@@ -56,8 +63,8 @@ class Example extends StatelessWidget {
 '''
 
 controllerEX="""
-class Example with ChangeNotifier {
-  
+class ExampleController with ChangeNotifier {
+
 }
 """
 
@@ -67,27 +74,34 @@ cDir(){
     fi
 }
 gService(){
+    initLib
     cDir services
     cd services
     CCreate services "$1" service "$serviceEX"
 }
 
 gModel(){
+    initLib
     cDir models
     cd models
     CCreate models "$1" model "$modelsEX"
 }
 gScreen(){
+    initLib
     cDir app
     cd app
     CCreate app "$1" screen "$screenEX"
 }
 
 gController(){
+    initLib
     cDir app
     cd app
     CCreate app "$1" controller "$controllerEX"
+   
 }
+
+
 
 CCreate(){
     DNAME=$1
@@ -96,24 +110,24 @@ CCreate(){
     TMPL=$4
     DIR=$(pwd)
     tn="$(tr '[:lower:]' '[:upper:]' <<< ${TYPE:0:1})${TYPE:1}"
-    FILENAME=$(pwd)/"${arg1}"."${TYPE}".dart
+    if [ "${arg1:$((${#arg1}-1)):${#arg1}}" == '/' ] || [ "${arg1:0:1}" == '/' ]; then
+        echo "Format dir/file"
+        return
+    fi
+    FILENAME=$(pwd)/"$arg1"."$TYPE".dart
+    if [ -f  ${FILENAME} ]; then
+        echo -e "File  sudah ada"
+        return
+    fi
     TEMPLATE=""
     l=1
     cdB="../"
     IFS='/' read -ra ADDR <<< "$arg1"
-    
-    if [ "${arg1:$((${#arg1}-1)):${#arg1}}" == '/' ] || [ "${arg1:0:1}" == '/' ]; then
-        echo "Format dir/file"
-        return
-    elif [ -f  ${FILENAME} ]; then
-        echo -e "File  sudah ada"
-        return
-    fi
     if [ ${#ADDR[@]} == 1 ]; then
         sn="$(tr '[:lower:]' '[:upper:]' <<< ${arg1:0:1})${arg1:1}"
         TEMPLATE+="part of '${cdB}app.dart';\n"
-        TEMPLATE+=$(echo "$TMPL" | sed -e "s+Example+${sn}${tn}+g")
-        checkClass="$(grep -r ${sn}${tn} $DIR)"
+        TEMPLATE+=$(echo "$TMPL" | sed -e "s+Example+${sn}+g")
+        checkClass="$(grep -r "class ${sn}${tn}" $DIR)"
         if [ "$checkClass" != "" ]; then
             echo "Nama class ${sn}${tn} sudah digunakan"
             exit 0
@@ -126,8 +140,8 @@ CCreate(){
             if [  ${#ADDR[@]} == $l ]; then
                 sn="$(tr '[:lower:]' '[:upper:]' <<< ${i:0:1})${i:1}"
                 TEMPLATE+="part of '${cdB}app.dart';\n"
-                TEMPLATE+=$(echo "$TMPL" | sed -e "s+Example+${sn}${tn}+g")
-                checkClass="$(grep -r ${sn}${tn} $DIR)"
+                TEMPLATE+=$(echo "$TMPL" | sed -e "s+Example+${sn}+g")
+                checkClass="$(grep -r "class ${sn}${tn}" $DIR)"
                 if [ "$checkClass" != "" ]; then
                     echo "Nama class ${sn}${tn} sudah digunakan"
                     exit 0
@@ -156,9 +170,8 @@ initLib(){
 }
 appRegister(){
    initLib
-   sed -i -e '/^[[:space:]]*$/d'  $(pwd)/app.dart
-   echo -e "\npart '$1';" >> $(pwd)/app.dart
-   rm app.dart-e
+#    sed -i -e '/^[[:space:]]*$/d'  $(pwd)/app.dart
+    echo -e "\npart '$1';" >> $(pwd)/app.dart
 }
 
 showHelp(){
@@ -167,7 +180,26 @@ showHelp(){
 
 
 
-initLib
+regRoute(){
+    initLib
+    arg1="$1"
+    IFS='/' read -ra ADDR <<< "$arg1"
+    ADDR="${ADDR[1]}"
+    sn="$(tr '[:lower:]' '[:upper:]' <<< ${ADDR:0:1})${ADDR:1}"
+    S=$(pwd)/app/"$1".screen.dart
+    C=$(pwd)/app/"$1".controller.dart
+
+    TEMPLATE="\t${sn}Screen.routeName: (ctx) => ChangeNotifierProvider.value(value: ${sn}Controller(), child: ${sn}Screen()),\n};"
+
+    if [ -f  $S ] && [ -f  $C ]; then
+        initLib
+        sed -i -e "s+};+$TEMPLATE+g" $(pwd)/route.dart
+
+    fi
+}
+
+
+
 case "$1" in
     services|s)
         gService $2
@@ -178,6 +210,7 @@ case "$1" in
     component|c)
         gScreen $2
         gController $2
+        regRoute $2
         ;;
     *)
         showHelp
