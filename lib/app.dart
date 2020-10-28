@@ -26,3 +26,4 @@ part 'app/welcome.controller.dart';
 part 'services/auth.service.dart';
 part 'app/global.screen.dart';
 part 'app/global.controller.dart';
+part 'services/device.service.dart';

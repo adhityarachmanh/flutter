@@ -3,6 +3,16 @@
 # upd : arh 
 # ver : 1.0
 
+CBLUE="\x1b[34;1m"
+CRED="\x1b[31;1m"
+CGREEN="\x1b[32;1m"
+CYELLOW="\x1b[33;1m"
+CRESET="\x1b[39;49;00m"
+TERR="\e[1;40;97m"
+THIDE="\e[8m"
+
+MODULE="app.dart"
+ROUTE="route.dart"
 
 
 modelsEX="""
@@ -76,157 +86,175 @@ class ExampleController with ChangeNotifier {
 }
 """
 
-cDir(){
-    if [ ! -d $(pwd)/$1 ]; then
-        mkdir $1
-    fi
-}
-gService(){
-    initLib
-    cDir services
-    cd services
-    CCreate services "$1" service "$serviceEX"
+
+GService(){
+    InitLib
+    CCreate "$1" service "$serviceEX"
 }
 
-gModel(){
-    initLib
-    cDir models
-    cd models
-    CCreate models "$1" model "$modelsEX"
+GModel(){
+    InitLib
+    CCreate "$1" model "$modelsEX"
 }
-gScreen(){
-    initLib
-    cDir app
-    cd app
-    CCreate app "$1" screen "$screenEX"
+GScreen(){
+    InitLib
+    CCreate "$1" screen "$screenEX"
 }
 
-gController(){
-    initLib
-    cDir app
-    cd app
-    CCreate app "$1" controller "$controllerEX"
-   
+GController(){
+    InitLib
+    CCreate "$1" controller "$controllerEX"
 }
 
 
 
 CCreate(){
-    DNAME=$1
-    arg1=$2
-    TYPE=$3
-    TMPL=$4
+    if [ "$1" == "" ]; then
+        echo -e "$CRED\bError create $2 file \n$CGREEN\bExample:$CYELLOW [FILENAME] $CGREEN|$CYELLOW [DIR]{unlimited}/[FILENAME]$CRESET"
+        return
+    fi
+    CONTEXT=$1
+    TYPE=$2
+    TMPLIN=$3
     DIR=$(pwd)
-    tn="$(tr '[:lower:]' '[:upper:]' <<< ${TYPE:0:1})${TYPE:1}"
-    if [ "${arg1:$((${#arg1}-1)):${#arg1}}" == '/' ] || [ "${arg1:0:1}" == '/' ]; then
-        echo "Format dir/file"
+    TN="$(tr '[:lower:]' '[:upper:]' <<< ${TYPE:0:1})${TYPE:1}"
+    FILENAME=$(pwd)/"$CONTEXT"."$TYPE".dart
+    TMPLOUT=""
+    IDX=1
+    CDB=""
+    IFS='/' read -ra CTX <<< "$CONTEXT"
+    if [ "${CONTEXT:$((${#CONTEXT}-1)):${#CONTEXT}}" == '/' ] || [ "${CONTEXT:0:1}" == '/' ]; then
+        echo -e "$CYELLOW [FILENAME] $CGREEN|$CYELLOW [DIR]{unlimited}/[FILENAME]$CRESET"
+        return
+    elif [ -f  ${FILENAME} ]; then
+        echo -e "$CRED"$CONTEXT"."$TYPE".dart$CRESET$CYELLOW[FILE EXISTS]$CRESET"
         return
     fi
-    FILENAME=$(pwd)/"$arg1"."$TYPE".dart
-    if [ -f  ${FILENAME} ]; then
-        echo -e "File  sudah ada"
-        return
-    fi
-    TEMPLATE=""
-    l=1
-    cdB="../"
-    IFS='/' read -ra ADDR <<< "$arg1"
-    if [ ${#ADDR[@]} == 1 ]; then
-        sn="$(tr '[:lower:]' '[:upper:]' <<< ${arg1:0:1})${arg1:1}"
-        TEMPLATE+="part of '${cdB}app.dart';\n"
-        TEMPLATE+=$(echo "$TMPL" | sed -e "s+Example+${sn}+g")
-        checkClass="$(grep -r "class ${sn}${tn}" $DIR)"
-        if [ "$checkClass" != "" ]; then
-            echo "Nama class ${sn}${tn} sudah digunakan"
-            exit 0
-        fi
-        echo -e "$TEMPLATE" >> ${FILENAME}
-        appRegister  "${DNAME}/${arg1}"."${TYPE}".dart
-    else
-        for i in "${ADDR[@]}"
-        do
-            if [  ${#ADDR[@]} == $l ]; then
-                sn="$(tr '[:lower:]' '[:upper:]' <<< ${i:0:1})${i:1}"
-                TEMPLATE+="part of '${cdB}app.dart';\n"
-                TEMPLATE+=$(echo "$TMPL" | sed -e "s+Example+${sn}+g")
-                checkClass="$(grep -r "class ${sn}${tn}" $DIR)"
-                if [ "$checkClass" != "" ]; then
-                    echo "Nama class ${sn}${tn} sudah digunakan"
-                    exit 0
-                fi
-                echo -e "$TEMPLATE" >> $(pwd)/"${i}"."${TYPE}".dart
-                appRegister  "${DNAME}/${arg1}"."${TYPE}".dart
-                return
-
+    for i in "${CTX[@]}"
+    do
+        if [  ${#CTX[@]} == $IDX ]; then
+            SN="$(tr '[:lower:]' '[:upper:]' <<< ${i:0:1})${i:1}"
+            TMPLOUT+="part of '${CDB}${MODULE}';\n"
+            TMPLOUT+=$(echo "$TMPLIN" | sed -e "s+Example+${SN}+g")
+            CHECKCLASS="$(grep -r "class ${SN}${TN}" $DIR)"
+            IFS=':' read -ra CLS <<< "$CHECKCLASS"
+            CLS=$(echo ${CLS[0]} | sed -e "s+${DIR}++g" )
+            if [ "$CHECKCLASS" != "" ]; then
+                echo -e "\a$CRED\bDuplicate class name $CGREEN${SN}${TN}$CRESET at $CYELLOW$CLS$CRESET"
+                exit 0
             fi
+            echo -e "$TMPLOUT" >> $(pwd)/"${i}"."${TYPE}".dart
+            AppRegister  "${CONTEXT}"."${TYPE}".dart
+        else
             if [ ! -d $(pwd)/$i ]; then
                 mkdir $(pwd)/$i
             fi
             cd $(pwd)/$i
-            cdB+=$cdB
-            l=$(($l + 1))
-        done
-        
-    fi
+            CDB+="../"
+            IDX=$(($IDX + 1))
+        fi
+      
+    done
+  
 }
 
-initLib(){
+InitLib(){
     EXE=$0
     DIR=$(dirname "${EXE}")
     cd $DIR
     cd lib
 }
-appRegister(){
-   initLib
-    echo -e "\npart '$1';" >> $(pwd)/app.dart
-    sed -i -e '/^[[:space:]]*$/d'  $(pwd)/app.dart
+AppRegister(){
+   InitLib
+    echo -e "\npart '$1';" >> $(pwd)/$MODULE
+    sed -i -e '/^[[:space:]]*$/d'  $(pwd)/$MODULE
+    echo -e "$CGREEN $1 registered $CRESET"
 }
 
-showHelp(){
-    echo "help"
-}
+GenerateHelp(){
+    TEMPLATE=$(echo -e """
+    $CGREEN \bGenerates files based on a schematic.$CRESET
+    usage: generate <schematic> [options]
 
+    arguments:
+        $CGREEN"schematic"$CRESET
+            The schematic or collection:schematic to generate.
 
-
-regRoute(){
-    initLib
-    arg1="$1"
+    Available Schematic:
+        service (s)
+        model (m)
+        component (c)
     
-    IFS='/' read -ra ADDR <<< "$arg1"
-    if [ ${#ADDR[@]} == 1 ];then
-        ADDR="${ADDR[0]}"
-    else 
-        ADDR="${ADDR[1]}"
-    fi
-    sn="$(tr '[:lower:]' '[:upper:]' <<< ${ADDR:0:1})${ADDR:1}"
-    S=$(pwd)/app/"$1".screen.dart
-    C=$(pwd)/app/"$1".controller.dart
+    Example:
+        generate  service   services/auth  | g s services/auth
+        generate  model     models/auth    | g m services/auth
+        generate  component app/auth/login | g c app/auth/login
+    """)
+    echo -e "$TEMPLATE"
+}
 
-    TEMPLATE="\t${sn}Screen.routeName: (ctx) => ChangeNotifierProvider.value(value: ${sn}Controller(), child: ${sn}Screen()),\n};"
-    checkClass="$(grep -r "${sn}Screen" $(pwd)/route.dart)"
-    if [ -f  $S ] && [ -f  $C ] && [ "$checkClass" == "" ]; then
-        initLib
-        sed -i -e "s+};+$TEMPLATE+g" $(pwd)/route.dart
-        sed -i -e '/^[[:space:]]*$/d'  $(pwd)/route.dart
+ShowHelp(){
+    echo -e """
+    Available Commands:
+        generate (g) Generates files based on a schematic.
+    """
+}
+ShowVersion(){
+    echo -e ""
+}
+
+RegRoute(){
+    InitLib
+    CONTEXT=$1
+    IFS='/' read -ra CTX <<< "$CONTEXT"
+    if [ ${#CTX[@]} == 1 ];then
+        CTX="${CTX[0]}"
+    else 
+        CTX="${CTX[1]}"
+    fi
+    SN="$(tr '[:lower:]' '[:upper:]' <<< ${CTX:0:1})${CTX:1}"
+    DIRSCREEN=$(pwd)/"$1".screen.dart
+    DIRCONTROLLER=$(pwd)/"$1".controller.dart
+    TEMPLATE="\t${SN}Screen.routeName: (ctx) => ChangeNotifierProvider.value(value: ${SN}Controller(), child: ${SN}Screen()),\n};"
+    CHECKCLASS="$(grep -r "${SN}Screen" $(pwd)/$ROUTE)"
+    if [ -f  $DIRSCREEN ] && [ -f  $DIRCONTROLLER ] && [ "$CHECKCLASS" == "" ]; then
+        InitLib
+        sed -i -e "s+};+$TEMPLATE+g" $(pwd)/$ROUTE
+        sed -i -e '/^[[:space:]]*$/d'  $(pwd)/$ROUTE
     fi
 }
 
-
+Generate(){
+    case "$1" in
+        services|s)
+            GService $2
+            ;;
+        models|m)
+            GModel $2
+            ;;
+        component|c)
+            GScreen $2
+            GController $2
+            RegRoute $2
+            ;;
+        --help|--h|help|h)
+            GenerateHelp
+            ;;
+       
+    esac
+}
 
 case "$1" in
-    services|s)
-        gService $2
+    generate|g)
+        Generate $2 $3
         ;;
-    models|m)
-        gModel $2
+    --help|--h|help|h)
+        ShowHelp
         ;;
-    component|c)
-        gScreen $2
-        gController $2
-        regRoute $2
+    --version|--v|version|v)
+        ShowVersion
         ;;
-    *)
-        showHelp
+   
 esac
 exit 0
 

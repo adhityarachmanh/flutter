@@ -1,0 +1,17 @@
+part of '../app.dart';
+
+class DeviceService {
+    static Future<ResponseAPI> example() async {
+        try {
+            // GET : var client = await rest.get('URL',headers:{});
+            var client = await rest.put('URL',data:{},headers:{});
+            var response = ResponseAPI.fromJson(jsonDecode(client.body));
+             if (response.s == 1) {
+                return ResponseAPI(s: 1, msg: 'Error');
+            }
+            return response;
+        } catch (e) {
+            return ResponseAPI(s: 1, msg: 'Server Error');
+        }
+    }
+}
