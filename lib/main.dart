@@ -5,6 +5,7 @@ import 'app.dart';
 void main() {
   runApp(MultiProvider(
     providers: [
+      // GLobal Provider
       ChangeNotifierProvider.value(value: RouteFunction()),
       ChangeNotifierProvider.value(value: IndexController())
     ],
@@ -17,6 +18,11 @@ class Main extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+            pageTransitionsTheme: PageTransitionsTheme(builders: {
+          TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
+          TargetPlatform.android: ZoomPageTransitionsBuilder(),
+        })),
         navigatorKey: Provider.of<RouteFunction>(context).navigationKey,
         initialRoute: SplashScreen.routeName,
         routes: routes);

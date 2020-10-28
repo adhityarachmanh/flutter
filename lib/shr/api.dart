@@ -12,20 +12,21 @@ class Rest {
     return "$api/$serviceBase/$routeName";
   }
 
-  Future get(String routeName, headers) async {
+  Future get(String routeName, {Map<String, dynamic> headers}) async {
     var response = await http.get(routeAPI(routeName), headers: headers);
     if (response.statusCode == 200) return response;
   }
 
-  Future put(String routeName, object, headers) async {
+  Future put(String routeName,
+      {Map<String, dynamic> object, Map<String, dynamic> headers}) async {
     var response = await http.post(routeAPI(routeName),
         headers: headers, body: jsonEncode(object));
 
     if (response.statusCode == 200) return response;
   }
 
-  Future upload(
-      String routeName, File file, Map<String, dynamic> headers) async {
+  Future upload(String routeName, File file,
+      {Map<String, dynamic> headers}) async {
     var request = http.MultipartRequest('POST', Uri.parse(routeAPI(routeName)));
     request.files.add(http.MultipartFile(
         'file', file.readAsBytes().asStream(), file.lengthSync(),
@@ -34,8 +35,8 @@ class Rest {
     if (response.statusCode == 200) return response;
   }
 
-  Future fUpload(String routeName, File file, Map<String, dynamic> data,
-      Map<String, dynamic> headers) async {
+  Future fUpload(String routeName, File file,
+      {Map<String, dynamic> data, Map<String, dynamic> headers}) async {
     var request = http.MultipartRequest('POST', Uri.parse(routeAPI(routeName)));
     data.forEach((key, value) {
       request.fields[key] = value;

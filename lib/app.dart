@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:io';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:path/path.dart';
 import 'package:flutter/material.dart';
@@ -23,10 +21,7 @@ part 'app/splash.screen.dart';
 part 'app/splash.controller.dart';
 part 'extensions/hex.extension.dart';
 part 'models/auth.model.dart';
+part 'app/welcome.screen.dart';
+part 'app/welcome.controller.dart';
 part 'app/auth/login.screen.dart';
-
 part 'app/auth/login.controller.dart';
-
-part 'app/auth/register.screen.dart';
-
-part 'app/auth/register.controller.dart';

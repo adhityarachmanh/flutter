@@ -1,18 +1,18 @@
 part of '../app.dart';
 
-class SplashScreen extends StatelessWidget {
-  static final routeName = "/SplashScreen";
+class WelcomeScreen extends StatelessWidget {
+  static final routeName = "/WelcomeScreen";
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final route = Provider.of<RouteFunction>(context, listen: false);
     final routeParams = route.getParams(context);
-    final state = Provider.of<SplashController>(context);
-    final dispatch = Provider.of<SplashController>(context, listen: false);
+    final state = Provider.of<WelcomeController>(context);
+    final dispatch = Provider.of<WelcomeController>(context, listen: false);
     return Scaffold(
       body: Container(
         child: Center(
-          child: Text("SplashScreen"),
+          child: Text("WelcomeScreen"),
         ),
       ),
     );

@@ -171,8 +171,8 @@ initLib(){
 }
 appRegister(){
    initLib
-#    sed -i -e '/^[[:space:]]*$/d'  $(pwd)/app.dart
     echo -e "\npart '$1';" >> $(pwd)/app.dart
+    sed -i -e '/^[[:space:]]*$/d'  $(pwd)/app.dart
 }
 
 showHelp(){
@@ -184,18 +184,23 @@ showHelp(){
 regRoute(){
     initLib
     arg1="$1"
+    
     IFS='/' read -ra ADDR <<< "$arg1"
-    ADDR="${ADDR[1]}"
+    if [ ${#ADDR[@]} == 1 ];then
+        ADDR="${ADDR[0]}"
+    else 
+        ADDR="${ADDR[1]}"
+    fi
     sn="$(tr '[:lower:]' '[:upper:]' <<< ${ADDR:0:1})${ADDR:1}"
     S=$(pwd)/app/"$1".screen.dart
     C=$(pwd)/app/"$1".controller.dart
 
     TEMPLATE="\t${sn}Screen.routeName: (ctx) => ChangeNotifierProvider.value(value: ${sn}Controller(), child: ${sn}Screen()),\n};"
-
-    if [ -f  $S ] && [ -f  $C ]; then
+    checkClass="$(grep -r "${sn}Screen" $(pwd)/route.dart)"
+    if [ -f  $S ] && [ -f  $C ] && [ "$checkClass" == "" ]; then
         initLib
         sed -i -e "s+};+$TEMPLATE+g" $(pwd)/route.dart
-
+        sed -i -e '/^[[:space:]]*$/d'  $(pwd)/route.dart
     fi
 }
 
