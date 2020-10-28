@@ -5,9 +5,10 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final state = Provider.of<LoginController>(context);
-    final controller = Provider.of<LoginController>(context, listen: false);
     final route = Provider.of<RouteFunction>(context, listen: false);
+    final routeParams = route.getParams(context);
+    final state = Provider.of<LoginController>(context);
+    final dispatch = Provider.of<LoginController>(context, listen: false);
     return Scaffold(
         body: GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -27,7 +28,6 @@ class LoginScreen extends StatelessWidget {
                 children: [
                   Container(
                     padding: EdgeInsets.all(defaultMargin * 2.5),
-                    // width: SizeConfig.screenWidth,
                     child: Image.asset("assets/images/login.png"),
                   ),
                   Container(
@@ -35,16 +35,12 @@ class LoginScreen extends StatelessWidget {
                     padding:
                         EdgeInsets.only(left: 20, top: 5, bottom: 5, right: 10),
                     width: SizeConfig.screenWidth,
-                    // decoration: BoxDecoration(
-                    //   color: Colors.white,
-                    //   borderRadius: BorderRadius.circular(defaultMargin),
-                    // ),
                     child: TextField(
                       onSubmitted: (value) {},
                       style: textFontFS.copyWith(
                           color: primaryColor, fontWeight: FontWeight.w400),
                       onChanged: (value) =>
-                          controller.setEmailController(value),
+                          dispatch.setEmailController(value),
                       cursorColor: primaryColor,
                       decoration: InputDecoration(
                         focusedBorder: UnderlineInputBorder(
@@ -70,11 +66,11 @@ class LoginScreen extends StatelessWidget {
                       style: textFontFS.copyWith(
                           color: primaryColor, fontWeight: FontWeight.w400),
                       onChanged: (value) =>
-                          controller.setPasswordController(value),
+                          dispatch.setPasswordController(value),
                       cursorColor: primaryColor,
                       decoration: InputDecoration(
                         suffixIcon: GestureDetector(
-                          onTap: controller.showPassword,
+                          onTap: dispatch.showPassword,
                           child: Icon(
                             state._showPassword
                                 ? Icons.visibility

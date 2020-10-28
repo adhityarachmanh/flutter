@@ -5,9 +5,10 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final state = Provider.of<RegisterController>(context);
-    final controller = Provider.of<RegisterController>(context, listen: false);
     final route = Provider.of<RouteFunction>(context, listen: false);
+    final routeParams = route.getParams(context);
+    final state = Provider.of<RegisterController>(context);
+    final dispatch = Provider.of<RegisterController>(context, listen: false);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

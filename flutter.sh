@@ -48,9 +48,10 @@ class ExampleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final state = Provider.of<ExampleController>(context);
-    final controller = Provider.of<ExampleController>(context, listen: false);
     final route = Provider.of<RouteFunction>(context, listen: false);
+    final routeParams = route.getParams(context);
+    final state = Provider.of<ExampleController>(context);
+    final dispatch = Provider.of<ExampleController>(context, listen: false);
     return Scaffold(
       body: Container(
         child: Center(

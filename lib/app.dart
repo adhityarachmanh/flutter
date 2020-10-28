@@ -12,7 +12,7 @@ import 'package:http/http.dart' as http;
 import 'dart:math';
 import 'dart:math' show cos, sqrt, asin;
 part 'config.dart';
-part 'index.controller.dart';
+part 'index.dart';
 part 'route.dart';
 part 'styles.dart';
 part 'models/api.model.dart';

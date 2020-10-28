@@ -9,6 +9,10 @@ class RouteFunction with ChangeNotifier {
     return navigationKey.currentState.pop();
   }
 
+  Future<dynamic> getParams(BuildContext context) {
+    return ModalRoute.of(context).settings.arguments;
+  }
+
   Future<dynamic> navigateTo(String routeName, {dynamic arguments}) {
     return _navigationKey.currentState
         .pushNamed(routeName, arguments: arguments);
@@ -17,6 +21,6 @@ class RouteFunction with ChangeNotifier {
   Future<dynamic> navigateToAndRemoveUntil(String routeName,
       {dynamic arguments}) {
     return _navigationKey.currentState
-        .pushNamedAndRemoveUntil(routeName, (r) => false);
+        .pushNamedAndRemoveUntil(routeName, (r) => false, arguments: arguments);
   }
 }

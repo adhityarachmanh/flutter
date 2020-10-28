@@ -5,10 +5,11 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final state = Provider.of<SplashController>(context);
-    final controller = Provider.of<SplashController>(context, listen: false);
     final route = Provider.of<RouteFunction>(context, listen: false);
-    controller.init(context);
+    final routeParams = route.getParams(context);
+    final state = Provider.of<SplashController>(context);
+    final dispatch = Provider.of<SplashController>(context, listen: false);
+    dispatch.init(context);
     return Scaffold(
         backgroundColor: primaryColor.withAlpha(75),
         body: Column(
