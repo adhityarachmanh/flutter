@@ -240,7 +240,9 @@ Generate(){
         --help|--h|help|h)
             GenerateHelp
             ;;
-       
+        *)
+            echo -e 'For more detailed help run "generate --help"'
+            ;;
     esac
 }
 
@@ -254,7 +256,9 @@ case "$1" in
     --version|--v|version|v)
         ShowVersion
         ;;
-   
+    *)
+        echo -e 'For more detailed help run "--help"'
+        ;;
 esac
 exit 0
 
