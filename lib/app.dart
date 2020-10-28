@@ -23,5 +23,6 @@ part 'extensions/hex.extension.dart';
 part 'models/auth.model.dart';
 part 'app/welcome.screen.dart';
 part 'app/welcome.controller.dart';
-part 'app/auth/login.screen.dart';
-part 'app/auth/login.controller.dart';
+part 'services/auth.service.dart';
+part 'app/global.screen.dart';
+part 'app/global.controller.dart';

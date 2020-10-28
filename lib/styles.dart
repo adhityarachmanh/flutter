@@ -2,20 +2,21 @@ part of 'app.dart';
 
 double defaultMargin = 25;
 
-Color primaryColor = HexColor.fromHex("#4a4a4a");
+Color primaryColor = HexColor.fromHex("#000000");
 Color secondaryColor = HexColor.fromHex("#f7f7f7");
 
 Color successColor = Color(0xFF3E9D9D);
 Color warningColor = Color(0xFFFBD460);
 Color errorColor = Color(0xFFFF5C83);
 
-TextStyle textFontFC = GoogleFonts.firaCode(
-  fontStyle: FontStyle.normal,
-).copyWith(color: Colors.white, fontWeight: FontWeight.w500);
 
-TextStyle textFontFS = GoogleFonts.firaSans(
+TextStyle textPrimary = GoogleFonts.roboto(
   fontStyle: FontStyle.normal,
-).copyWith(color: Colors.white, fontWeight: FontWeight.w500);
+).copyWith(color: primaryColor, fontWeight: FontWeight.w500);
+
+TextStyle textSecondary = GoogleFonts.roboto(
+  fontStyle: FontStyle.normal,
+).copyWith(color: secondaryColor, fontWeight: FontWeight.w500);
 
 class SizeConfig {
   static MediaQueryData _mediaQueryData;

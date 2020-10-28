@@ -19,10 +19,11 @@ class Main extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+            primaryColor: primaryColor,
             pageTransitionsTheme: PageTransitionsTheme(builders: {
-          TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
-          TargetPlatform.android: ZoomPageTransitionsBuilder(),
-        })),
+              TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
+              TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+            })),
         navigatorKey: Provider.of<RouteFunction>(context).navigationKey,
         initialRoute: SplashScreen.routeName,
         routes: routes);

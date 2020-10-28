@@ -9,13 +9,19 @@ class RouteFunction with ChangeNotifier {
     return navigationKey.currentState.pop();
   }
 
-  Future<dynamic> getParams(BuildContext context) {
+  dynamic getParams(BuildContext context) {
     return ModalRoute.of(context).settings.arguments;
   }
 
   Future<dynamic> navigateTo(String routeName, {dynamic arguments}) {
     return _navigationKey.currentState
         .pushNamed(routeName, arguments: arguments);
+  }
+
+  Future<dynamic> navigateToReplacementNamed(String routeName,
+      {dynamic arguments}) {
+    return _navigationKey.currentState
+        .pushReplacementNamed(routeName, arguments: arguments);
   }
 
   Future<dynamic> navigateToAndRemoveUntil(String routeName,

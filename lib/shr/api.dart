@@ -18,9 +18,9 @@ class Rest {
   }
 
   Future put(String routeName,
-      {Map<String, dynamic> object, Map<String, dynamic> headers}) async {
+      {Map<String, dynamic> data, Map<String, dynamic> headers}) async {
     var response = await http.post(routeAPI(routeName),
-        headers: headers, body: jsonEncode(object));
+        headers: headers, body: jsonEncode(data));
 
     if (response.statusCode == 200) return response;
   }

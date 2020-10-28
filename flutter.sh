@@ -28,8 +28,8 @@ serviceEX="""
 class ExampleService {
     static Future<ResponseAPI> example() async {
         try {
-            // GET : var client = await rest.get('URL',{});
-            var client = await rest.put('URL',{},{});
+            // GET : var client = await rest.get('URL',headers:{});
+            var client = await rest.put('URL',data:{},headers:{});
             var response = ResponseAPI.fromJson(jsonDecode(client.body));
              if (response.s == 1) {
                 return ResponseAPI(s: 1, msg: 'Error');
@@ -48,12 +48,19 @@ class ExampleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    // Global controller
+    final globalState = Provider.of<IndexController>(context);
+    final globalDispatch = Provider.of<IndexController>(context, listen: false);
+    // Route
     final route = Provider.of<RouteFunction>(context, listen: false);
     final routeParams = route.getParams(context);
+    // Local controller
     final state = Provider.of<ExampleController>(context);
     final dispatch = Provider.of<ExampleController>(context, listen: false);
     return Scaffold(
       body: Container(
+        width: SizeConfig.screenWidth,
+        height: SizeConfig.screenHeight,
         child: Center(
           child: Text("ExampleScreen"),
         ),
