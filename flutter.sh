@@ -137,10 +137,10 @@ GenerateHelp(){
             The schematic or collection:schematic to generate.
 
     Available Schematic:
-        service   (s)   create service file                                  $CYELLOW\brecomended in directory services$CRESET
-        model     (m)   create model file                                    $CYELLOW\brecomended in directory models$CRESET
-        component (c)   create screen,controller file + register navigation  $CYELLOW\brecomended in directory screens$CRESET
-        widget    (w)   create widget file                                   $CYELLOW\brecomended in directory widgets$CRESET
+        service   (s)   create service file                                  $CYELLOW\bsuggested in directory services$CRESET
+        model     (m)   create model file                                    $CYELLOW\bsuggested in directory models$CRESET
+        component (c)   create screen,controller file + register navigation  $CYELLOW\bsuggested in directory screens$CRESET
+        widget    (w)   create widget file                                   $CYELLOW\bsuggested in directory widgets$CRESET
     
     Example:
         generate  service   services/auth      | g s services/auth
