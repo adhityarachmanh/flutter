@@ -22,4 +22,3 @@ part 'extensions/hex.extension.dart';
 part 'models/auth.model.dart';
 part 'models/user.model.dart';
 part 'services/auth.service.dart';
-part 'screens/welcome.screen.dart';
