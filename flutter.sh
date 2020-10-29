@@ -193,10 +193,10 @@ RegRoute(){
 
 Generate(){
     case "$1" in
-        services|s)
+        service|s)
             GService $2
             ;;
-        models|m)
+        model|m)
             GModel $2
             ;;
         component|c)
