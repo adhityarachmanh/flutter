@@ -27,3 +27,5 @@ part 'services/auth.service.dart';
 part 'app/global.screen.dart';
 part 'app/global.controller.dart';
 part 'services/device.service.dart';
+part 'models/users.model.dart';
+part 'services/users.service.dart';

@@ -15,95 +15,36 @@ MODULE="app.dart"
 ROUTE="route.dart"
 
 
-modelsEX="""
-class ExampleModel extends Equatable {
+modelsEX="https://bit.ly/2TygKk9"
+serviceEX="https://bit.ly/35GV8HT"
+screenEX="https://bit.ly/31UjE7v"
+controllerEX="https://bit.ly/37PiQV3"
 
-    ExampleModel();
-
-    factory ExampleModel.fromJson(Map<String, dynamic> json) {
-        return ExampleModel();
-    }
-    Map<String, dynamic> toJson() {
-        return {};
-    }
-
-    ExampleModel copyWith() => ExampleModel();
-
-    @override
-    List<Object> get props => [];
+GTemplate(){
+    HTTPS=$(echo $LINES | curl "$1"| grep -r https )
+    IFS='"' read -ra CX <<< "$HTTPS"
+    URL="${CX[1]}"
+    RESPONSE=$(curl $URL )
+    local RESPONSE="$RESPONSE"
 }
-"""
-
-serviceEX="""
-class ExampleService {
-    static Future<ResponseAPI> example() async {
-        try {
-            // GET : var client = await rest.get('URL',headers:{});
-            var client = await rest.put('URL',data:{},headers:{});
-            var response = ResponseAPI.fromJson(jsonDecode(client.body));
-             if (response.s == 1) {
-                return ResponseAPI(s: 1, msg: 'Error');
-            }
-            return response;
-        } catch (e) {
-            return ResponseAPI(s: 1, msg: 'Server Error');
-        }
-    }
-}
-"""
-
-screenEX='''
-class ExampleScreen extends StatelessWidget {
-  static final routeName = "/ExampleScreen";
-  @override
-  Widget build(BuildContext context) {
-    SizeConfig().init(context);
-    // Global controller
-    final globalState = Provider.of<IndexController>(context);
-    final globalDispatch = Provider.of<IndexController>(context, listen: false);
-    // Route
-    final route = Provider.of<RouteFunction>(context, listen: false);
-    final routeParams = route.getParams(context);
-    // Local controller
-    final state = Provider.of<ExampleController>(context);
-    final dispatch = Provider.of<ExampleController>(context, listen: false);
-    return Scaffold(
-      body: Container(
-        width: SizeConfig.screenWidth,
-        height: SizeConfig.screenHeight,
-        child: Center(
-          child: Text("ExampleScreen"),
-        ),
-      ),
-    );
-  }
-}
-'''
-
-controllerEX="""
-class ExampleController with ChangeNotifier {
-
-}
-"""
-
 
 GService(){
     InitLib
-    CCreate "$1" service "$serviceEX"
+    CCreate "$1" service  $serviceEX
 }
 
 GModel(){
     InitLib
-    CCreate "$1" model "$modelsEX"
+    CCreate "$1" model $modelsEX
 }
 GScreen(){
     InitLib
-    CCreate "$1" screen "$screenEX"
+    CCreate "$1" screen $screenEX
 }
 
 GController(){
     InitLib
-    CCreate "$1" controller "$controllerEX"
+    CCreate "$1" controller $controllerEX
 }
 
 
@@ -115,7 +56,7 @@ CCreate(){
     fi
     CONTEXT=$1
     TYPE=$2
-    TMPLIN=$3
+    TMPLTURL=$3
     DIR=$(pwd)
     TN="$(tr '[:lower:]' '[:upper:]' <<< ${TYPE:0:1})${TYPE:1}"
     FILENAME=$(pwd)/"$CONTEXT"."$TYPE".dart
@@ -127,22 +68,23 @@ CCreate(){
         echo -e "$CYELLOW [FILENAME] $CGREEN|$CYELLOW [DIR]{unlimited}/[FILENAME]$CRESET"
         return
     elif [ -f  ${FILENAME} ]; then
-        echo -e "$CRED"$CONTEXT"."$TYPE".dart$CRESET$CYELLOW[FILE EXISTS]$CRESET"
+        echo -e "$CRED"$CONTEXT"."$TYPE".dart$CRESET$CYELLOW file already exists$CRESET."
         return
     fi
     for i in "${CTX[@]}"
     do
         if [  ${#CTX[@]} == $IDX ]; then
             SN="$(tr '[:lower:]' '[:upper:]' <<< ${i:0:1})${i:1}"
-            TMPLOUT+="part of '${CDB}${MODULE}';\n"
-            TMPLOUT+=$(echo "$TMPLIN" | sed -e "s+Example+${SN}+g")
             CHECKCLASS="$(grep -r "class ${SN}${TN}" $DIR)"
             IFS=':' read -ra CLS <<< "$CHECKCLASS"
             CLS=$(echo ${CLS[0]} | sed -e "s+${DIR}++g" )
             if [ "$CHECKCLASS" != "" ]; then
                 echo -e "\a$CRED\bDuplicate class name $CGREEN${SN}${TN}$CRESET at $CYELLOW$CLS$CRESET"
-                exit 0
+                return
             fi
+            GTemplate $TMPLTURL
+            TMPLOUT+="part of '${CDB}${MODULE}';\n"
+            TMPLOUT+=$(echo "$RESPONSE" | sed -e "s+Example+${SN}+g")
             echo -e "$TMPLOUT" >> $(pwd)/"${i}"."${TYPE}".dart
             AppRegister  "${CONTEXT}"."${TYPE}".dart
         else
@@ -168,7 +110,10 @@ AppRegister(){
    InitLib
     echo -e "\npart '$1';" >> $(pwd)/$MODULE
     sed -i -e '/^[[:space:]]*$/d'  $(pwd)/$MODULE
-    echo -e "$CGREEN $1 registered $CRESET"
+    echo -e "$CGREEN$1 has been successfully registered.$CRESET"
+    if [ -f $(pwd)/app.dart-e ];then
+        rm $(pwd)/app.dart-e
+    fi
 }
 
 GenerateHelp(){
@@ -219,10 +164,19 @@ RegRoute(){
     CHECKCLASS="$(grep -r "${SN}Screen" $(pwd)/$ROUTE)"
     if [ -f  $DIRSCREEN ] && [ -f  $DIRCONTROLLER ] && [ "$CHECKCLASS" == "" ]; then
         InitLib
-        sed -i -e "s+};+$TEMPLATE+g" $(pwd)/$ROUTE
+        sed -i -e "s+};++g" $(pwd)/$ROUTE
+        echo -e "$TEMPLATE" >> $(pwd)/$ROUTE
         sed -i -e '/^[[:space:]]*$/d'  $(pwd)/$ROUTE
+        echo -e "$CGREEN\bRoute '/${SN}Screen' has been successfully registered at $ROUTE.$CRESET"
+        if [ -f $(pwd)/route.dart-e ];then
+            rm $(pwd)/route.dart-e
+        fi
+    else
+        echo -e "$CGREEN\bRoute '/${SN}Screen' has been exists at $ROUTE.$CRESET"
     fi
 }
+
+
 
 Generate(){
     case "$1" in
