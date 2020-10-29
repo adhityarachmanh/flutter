@@ -15,15 +15,24 @@ MODULE="app.dart"
 ROUTE="route.dart"
 modelsEX="3mDsDlv"
 serviceEX="3mDsiiJ"
-screenEX="34E2GMi"
-controllerEX="2HBdu5n"
+screenEX="2HNVjJq"
+widgetEX="3e973Sw"
+screenControllerEX="2J8Dl4K"
 
 GTemplate(){
     HTTPS=$(echo $LINES | curl "https://bit.ly/$1"| grep -r https )
     IFS='"' read -ra CX <<< "$HTTPS"
     URL="${CX[1]}"
-    RESPONSE=$(curl $URL )
-    local RESPONSE="$RESPONSE"
+    RESPONSE=$(curl --write-out '%{http_code}' --silent --output /dev/null $URL)
+    if [ "$RESPONSE" == "200" ];then
+        echo -e "$CGREEN\bRequest Success with status code$CRESET[$RESPONSE]"
+        RESPONSE=$(curl $URL )
+        local RESPONSE="$RESPONSE"
+    else
+        echo -e "$CRED\bRequest failed with status code$CRESET[$RESPONSE]"
+        exit 0
+    fi
+  
 }
 
 GService(){
@@ -40,16 +49,20 @@ GScreen(){
     CCreate "$1" screen $screenEX
 }
 
-GController(){
+GSController(){
     InitLib
-    CCreate "$1" controller $controllerEX
+    CCreate "$1" controller $screenControllerEX
 }
 
+GWidget(){
+    InitLib
+    CCreate "$1" widget $widgetEX
+}
 
 
 CCreate(){
     if [ "$1" == "" ]; then
-        echo -e "$CRED\bError create $2 file \n$CGREEN\bExample:$CYELLOW [FILENAME] $CGREEN|$CYELLOW [DIR]{unlimited}/[FILENAME]$CRESET"
+        echo -e "$CRED\bError create $2 file \n$CGREEN\bExample:$CYELLOW [FILENAME] $CGREEN|$CYELLOW [DIR]{infinity}/[FILENAME]$CRESET"
         return
     fi
     CONTEXT=$1
@@ -108,7 +121,7 @@ AppRegister(){
    InitLib
     echo -e "\npart '$1';" >> $(pwd)/$MODULE
     sed -i -e '/^[[:space:]]*$/d'  $(pwd)/$MODULE
-    echo -e "$CGREEN$1 has been successfully registered.$CRESET at $MODULE"
+    echo -e "$CGREEN$1 successfully registered.$CRESET at $MODULE"
     if [ -f $(pwd)/app.dart-e ];then
         rm $(pwd)/app.dart-e
     fi
@@ -124,14 +137,16 @@ GenerateHelp(){
             The schematic or collection:schematic to generate.
 
     Available Schematic:
-        service (s)
-        model (m)
-        component (c)
+        service   (s)   create service file                                  $CYELLOW\brecomended in directory services$CRESET
+        model     (m)   create model file                                    $CYELLOW\brecomended in directory models$CRESET
+        component (c)   create screen,controller file + register navigation  $CYELLOW\brecomended in directory screens$CRESET
+        widget    (w)   create widget file                                   $CYELLOW\brecomended in directory widgets$CRESET
     
     Example:
-        generate  service   services/auth  | g s services/auth
-        generate  model     models/auth    | g m services/auth
-        generate  component app/auth/login | g c app/auth/login
+        generate  service   services/auth      | g s services/auth
+        generate  model     models/auth        | g m services/auth
+        generate  component screens/auth/login | g c screens/auth/login
+        generate  widget    screens/auth/login | g w widgets/button
     """)
     echo -e "$TEMPLATE"
 }
@@ -153,7 +168,7 @@ RegRoute(){
     if [ ${#CTX[@]} == 1 ];then
         CTX="${CTX[0]}"
     else 
-        CTX="${CTX[1]}"
+        CTX="${CTX[${#CTX[@]}-1]}"
     fi
     SN="$(tr '[:lower:]' '[:upper:]' <<< ${CTX:0:1})${CTX:1}"
     DIRSCREEN=$(pwd)/"$1".screen.dart
@@ -165,7 +180,7 @@ RegRoute(){
         sed -i -e "s+};++g" $(pwd)/$ROUTE
         echo -e "$TEMPLATE" >> $(pwd)/$ROUTE
         sed -i -e '/^[[:space:]]*$/d'  $(pwd)/$ROUTE
-        echo -e "$CGREEN\bRoute '/${SN}Screen' has been successfully registered at $ROUTE.$CRESET"
+        echo -e "$CGREEN\bRoute '/${SN}Screen' successfully registered at $ROUTE.$CRESET"
         if [ -f $(pwd)/route.dart-e ];then
             rm $(pwd)/route.dart-e
         fi
@@ -186,8 +201,11 @@ Generate(){
             ;;
         component|c)
             GScreen $2
-            GController $2
+            GSController $2
             RegRoute $2
+            ;;
+        widget|w)
+            GWidget $2
             ;;
         --help|--h|help|h)
             GenerateHelp

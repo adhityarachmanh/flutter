@@ -19,9 +19,13 @@ class SplashScreen extends StatelessWidget {
         width: SizeConfig.screenWidth,
         height: SizeConfig.screenHeight,
         child: Center(
-          child: Text(
-            "SplashScreen",
-          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+            Text("SplashScreenWorks!",style: textPrimary.copyWith(fontSize:30)),
+            SizedBox(height:defaultMargin),
+            Text(state.title,style: textPrimary.copyWith(fontSize:20)),
+          ],)
         ),
       ),
     );
