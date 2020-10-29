@@ -184,7 +184,7 @@ RegRoute(){
         if [ -f $(pwd)/route.dart-e ];then
             rm $(pwd)/route.dart-e
         fi
-    else
+    elif [ -f  $DIRSCREEN ] && [ -f  $DIRCONTROLLER ] && [ "$CHECKCLASS" != "" ]; then
         echo -e "$CGREEN\bRoute '/${SN}Screen' has been exists at $ROUTE.$CRESET"
     fi
 }
