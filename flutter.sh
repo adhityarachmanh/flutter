@@ -131,11 +131,9 @@ GenerateHelp(){
     TEMPLATE=$(echo -e """
     $CGREEN \bGenerates files based on a schematic.$CRESET
     usage: generate <schematic> [options]
-
     arguments:
         $CGREEN"schematic"$CRESET
             The schematic or collection:schematic to generate.
-
     Available Schematic:
         service   (s)   create service file                                  $CYELLOW\bsuggested in directory services$CRESET
         model     (m)   create model file                                    $CYELLOW\bsuggested in directory models$CRESET
@@ -164,28 +162,30 @@ ShowVersion(){
 RegRoute(){
     InitLib
     CONTEXT=$1
-    IFS='/' read -ra CTX <<< "$CONTEXT"
-    if [ ${#CTX[@]} == 1 ];then
-        CTX="${CTX[0]}"
-    else 
-        CTX="${CTX[${#CTX[@]}-1]}"
-    fi
-    SN="$(tr '[:lower:]' '[:upper:]' <<< ${CTX:0:1})${CTX:1}"
-    DIRSCREEN=$(pwd)/"$1".screen.dart
-    DIRCONTROLLER=$(pwd)/"$1".controller.dart
-    TEMPLATE="\t${SN}Screen.routeName: (ctx) => ChangeNotifierProvider.value(value: ${SN}Controller(), child: ${SN}Screen()),\n};"
-    CHECKCLASS="$(grep -r "${SN}Screen" $(pwd)/$ROUTE)"
-    if [ -f  $DIRSCREEN ] && [ -f  $DIRCONTROLLER ] && [ "$CHECKCLASS" == "" ]; then
-        InitLib
-        sed -i -e "s+};++g" $(pwd)/$ROUTE
-        echo -e "$TEMPLATE" >> $(pwd)/$ROUTE
-        sed -i -e '/^[[:space:]]*$/d'  $(pwd)/$ROUTE
-        echo -e "$CGREEN\bRoute '/${SN}Screen' successfully registered at $ROUTE.$CRESET"
-        if [ -f $(pwd)/route.dart-e ];then
-            rm $(pwd)/route.dart-e
+    if [ "$CONTEXT" != "" ];then
+        IFS='/' read -ra CTX <<< "$CONTEXT"
+        if [ ${#CTX[@]} == 1 ];then
+            CTX="${CTX[0]}"
+        else 
+            CTX="${CTX[${#CTX[@]}-1]}"
         fi
-    elif [ -f  $DIRSCREEN ] && [ -f  $DIRCONTROLLER ] && [ "$CHECKCLASS" != "" ]; then
-        echo -e "$CGREEN\bRoute '/${SN}Screen' has been exists at $ROUTE.$CRESET"
+        SN="$(tr '[:lower:]' '[:upper:]' <<< ${CTX:0:1})${CTX:1}"
+        DIRSCREEN=$(pwd)/"$1".screen.dart
+        DIRCONTROLLER=$(pwd)/"$1".controller.dart
+        TEMPLATE="\t${SN}Screen.routeName: (ctx) => ChangeNotifierProvider.value(value: ${SN}Controller(), child: ${SN}Screen()),\n};"
+        CHECKCLASS="$(grep -r "${SN}Screen" $(pwd)/$ROUTE)"
+        if [ -f  $DIRSCREEN ] && [ -f  $DIRCONTROLLER ] && [ "$CHECKCLASS" == "" ]; then
+            InitLib
+            sed -i -e "s+};++g" $(pwd)/$ROUTE
+            echo -e "$TEMPLATE" >> $(pwd)/$ROUTE
+            sed -i -e '/^[[:space:]]*$/d'  $(pwd)/$ROUTE
+            echo -e "$CGREEN\bRoute '/${SN}Screen' successfully registered at $ROUTE.$CRESET"
+            if [ -f $(pwd)/route.dart-e ];then
+                rm $(pwd)/route.dart-e
+            fi
+        elif [ -f  $DIRSCREEN ] && [ -f  $DIRCONTROLLER ] && [ "$CHECKCLASS" != "" ]; then
+            echo -e "$CGREEN\bRoute '/${SN}Screen' has been exists at $ROUTE.$CRESET"
+        fi
     fi
 }
 
@@ -231,4 +231,3 @@ case "$1" in
         ;;
 esac
 exit 0
-
