@@ -13,12 +13,10 @@ THIDE="\e[8m"
 
 MODULE="app.dart"
 ROUTE="route.dart"
-
-
-modelsEX="https://bit.ly/2TygKk9"
-serviceEX="https://bit.ly/35GV8HT"
-screenEX="https://bit.ly/31UjE7v"
-controllerEX="https://bit.ly/37PiQV3"
+modelsEX="https://bit.ly/34B1MA3"
+serviceEX="https://bit.ly/35N80fC"
+screenEX="https://bit.ly/3oAxgOX"
+controllerEX="https://bit.ly/2HK5oqJ"
 
 GTemplate(){
     HTTPS=$(echo $LINES | curl "$1"| grep -r https )
@@ -84,7 +82,7 @@ CCreate(){
             fi
             GTemplate $TMPLTURL
             TMPLOUT+="part of '${CDB}${MODULE}';\n"
-            TMPLOUT+=$(echo "$RESPONSE" | sed -e "s+Example+${SN}+g")
+            TMPLOUT+=$(echo "\n$RESPONSE" | sed -e "s+Example+${SN}+g")
             echo -e "$TMPLOUT" >> $(pwd)/"${i}"."${TYPE}".dart
             AppRegister  "${CONTEXT}"."${TYPE}".dart
         else
@@ -110,7 +108,7 @@ AppRegister(){
    InitLib
     echo -e "\npart '$1';" >> $(pwd)/$MODULE
     sed -i -e '/^[[:space:]]*$/d'  $(pwd)/$MODULE
-    echo -e "$CGREEN$1 has been successfully registered.$CRESET"
+    echo -e "$CGREEN$1 has been successfully registered.$CRESET at $MODULE"
     if [ -f $(pwd)/app.dart-e ];then
         rm $(pwd)/app.dart-e
     fi
