@@ -121,7 +121,7 @@ AppRegister(){
    InitLib
     echo -e "\npart '$1';" >> $(pwd)/$MODULE
     sed -i -e '/^[[:space:]]*$/d'  $(pwd)/$MODULE
-    echo -e "$CGREEN$1 successfully registered.$CRESET at $MODULE"
+    echo -e "$CGREEN$1 successfully registered. at $MODULE$CRESET"
     if [ -f $(pwd)/app.dart-e ];then
         rm $(pwd)/app.dart-e
     fi
