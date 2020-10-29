@@ -1,13 +1,22 @@
 part of '../app.dart';
 
-var contentType = "Content-Type",
-    appJSON = "application/json",
-    multipartFormData = "multipart/form-data",
-    xToken = 'XA',
-    serviceBase = config.res,
-    api = config.api;
+class ResponseAPI {
+  int s;
+  String msg;
+  dynamic data;
+  ResponseAPI({@required this.s, this.msg, this.data});
+  factory ResponseAPI.fromJson(Map<String, dynamic> json) {
+    return ResponseAPI(s: json['s'], msg: json['msg'], data: json['data']);
+  }
+}
 
 class Rest {
+  static String contentType = "Content-Type";
+  static String appJSON = "application/json";
+  static String multipartFormData = "multipart/form-data";
+  static String xToken = 'XA';
+  static String serviceBase = config.res;
+  static String api = config.api;
   static String routeAPI(String routeName) {
     return "$api/$serviceBase/$routeName";
   }

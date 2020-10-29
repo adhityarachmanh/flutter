@@ -13,13 +13,13 @@ THIDE="\e[8m"
 
 MODULE="app.dart"
 ROUTE="route.dart"
-modelsEX="https://bit.ly/34B1MA3"
-serviceEX="https://bit.ly/35N80fC"
-screenEX="https://bit.ly/3oAxgOX"
-controllerEX="https://bit.ly/2HK5oqJ"
+modelsEX="3mDsDlv"
+serviceEX="3mDsiiJ"
+screenEX="34E2GMi"
+controllerEX="2HBdu5n"
 
 GTemplate(){
-    HTTPS=$(echo $LINES | curl "$1"| grep -r https )
+    HTTPS=$(echo $LINES | curl "https://bit.ly/$1"| grep -r https )
     IFS='"' read -ra CX <<< "$HTTPS"
     URL="${CX[1]}"
     RESPONSE=$(curl $URL )

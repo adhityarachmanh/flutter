@@ -2,8 +2,8 @@ part of 'app.dart';
 
 double defaultMargin = 25;
 
-Color primaryColor = HexColor.fromHex("#000000");
-Color secondaryColor = HexColor.fromHex("#f7f7f7");
+Color primaryColor = HexColor.fromHex("#FF0000");
+Color secondaryColor = HexColor.fromHex("#FFFFFF");
 
 Color successColor = Color(0xFF3E9D9D);
 Color warningColor = Color(0xFFFBD460);

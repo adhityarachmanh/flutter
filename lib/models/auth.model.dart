@@ -1,21 +1,19 @@
 part of '../app.dart';
 
 class AuthModel extends Equatable {
-  final String fullname;
-  final String username;
 
-  AuthModel(this.username, {this.fullname});
+    AuthModel();
 
-  factory AuthModel.fromJson(Map<String, dynamic> json) {
-    return AuthModel(json['username'], fullname: json['fullname']);
-  }
-  Map<String, dynamic> toJson(Map<String, dynamic> json) {
-    return {"username": json['username'], "fullname": json['fullname']};
-  }
+    factory AuthModel.fromJson(Map<String, dynamic> json) {
+        return AuthModel();
+    }
+    
+    Map<String, dynamic> toJson() {
+        return {};
+    }
 
-  AuthModel copyWith(String fullname) =>
-      AuthModel(this.username, fullname: fullname ?? "");
+    AuthModel copyWith() => AuthModel();
 
-  @override
-  List<Object> get props => [username, fullname];
+    @override
+    List<Object> get props => [];
 }
