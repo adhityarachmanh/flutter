@@ -75,7 +75,7 @@ CCreate(){
     IDX=1
     CDB=""
     IFS='/' read -ra CTX <<< "$CONTEXT"
-    if [ "${CONTEXT:$((${#CONTEXT}-1)):${#CONTEXT}}" == '/' ] || [ "${CONTEXT:0:1}" == '/' ]; then
+    if [ "${CONTEXT:$((${#CONTEXT}-1)):${#CONTEXT}}" == "/" ] || [ "${CONTEXT:0:1}" == "/" ]; then
         echo -e "$CRED\bError create $2 file \n$CGREEN\bExample:$CYELLOW [FILENAME] $CGREEN|$CYELLOW [DIR]{infinity}/[FILENAME]$CRESET"
         return
     elif [ -f  ${FILENAME} ]; then
