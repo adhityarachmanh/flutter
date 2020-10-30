@@ -16,6 +16,7 @@ void main() {
 class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Provider.of<IndexController>(context,listen: false).onInit();
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
