@@ -92,9 +92,12 @@ CCreate(){
                 return
             fi
             GTemplate $TMPLTURL
+            CDB="$(tr '[:upper:]' '[:lower:]' <<< ${CDB})"
             TMPLOUT+="part of '${CDB}${MODULE}';\n"
             TMPLOUT+=$(echo "\n$RESPONSE" | sed -e "s+Example+${SN}+g")
+            i="$(tr '[:upper:]' '[:lower:]' <<< ${i})"
             echo -e "$TMPLOUT" >> $(pwd)/"${i}"."${TYPE}".dart
+            CONTEXT="$(tr '[:upper:]' '[:lower:]' <<< ${CONTEXT})"
             AppRegister  "${CONTEXT}"."${TYPE}".dart
         else
             if [ ! -d $(pwd)/$i ]; then
@@ -132,7 +135,7 @@ GenerateHelp(){
     arguments:
         $CGREEN"schematic"$CRESET
             The schematic or collection:schematic to generate.
-            
+
     Available Schematic:
         service   (s)   create service file                                  $CYELLOW\bsuggested in directory services$CRESET
         model     (m)   create model file                                    $CYELLOW\bsuggested in directory models$CRESET
