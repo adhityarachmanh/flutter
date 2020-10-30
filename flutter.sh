@@ -70,7 +70,6 @@ CCreate(){
     TMPLTURL=$3
     DIR=$(pwd)
     TN="$(tr '[:lower:]' '[:upper:]' <<< ${TYPE:0:1})${TYPE:1}"
-    FILENAME=$(pwd)/"$CONTEXT"."$TYPE".dart
     TMPLOUT=""
     IDX=1
     CDB=""
@@ -78,7 +77,7 @@ CCreate(){
     if [ "${CONTEXT:$((${#CONTEXT}-1)):${#CONTEXT}}" == "/" ] || [ "${CONTEXT:0:1}" == "/" ]; then
         echo -e "$CRED\bError create $2 file \n$CGREEN\bExample:$CYELLOW [FILENAME] $CGREEN|$CYELLOW [DIR]{infinity}/[FILENAME]$CRESET"
         return
-    elif [ -f  ${FILENAME} ]; then
+    elif [ -f $(pwd)/"$CONTEXT"."$TYPE".dart ]; then
         echo -e "$CRED"$CONTEXT"."$TYPE".dart$CRESET$CYELLOW file already exists$CRESET."
         return
     fi
