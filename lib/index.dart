@@ -15,4 +15,8 @@ class IndexController with ChangeNotifier {
     _user = payload;
     notifyListeners();
   }
+  
+  void onInit(){
+      print("init IndexController");
+  }
 }
