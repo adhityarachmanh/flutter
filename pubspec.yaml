@@ -27,6 +27,7 @@ dependencies:
   equatable: ^1.2.5
   flutter_secure_storage: ^3.3.5
   flutter_spinkit: ^4.1.2+1
+  flushbar: ^1.10.4
 
 dev_dependencies:
   flutter_test:
