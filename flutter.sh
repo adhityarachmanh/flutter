@@ -20,13 +20,12 @@ widgetEX="3e973Sw"
 screenControllerEX="2J8Dl4K"
 
 GTemplate(){
-    HTTPS=$(echo $LINES | curl "https://bit.ly/$1"| grep -r https )
+    HTTPS=$(echo $LINES | curl "https://bit.ly/$1" -s | grep -r https )
     IFS='"' read -ra CX <<< "$HTTPS"
     URL="${CX[1]}"
-    RESPONSE=$(curl --write-out '%{http_code}' --silent --output /dev/null $URL)
+    RESPONSE=$(curl --write-out '%{http_code}' -s -o /dev/null $URL)
     if [ "$RESPONSE" == "200" ];then
-        echo -e "$CGREEN\bRequest Success with status code$CRESET[$RESPONSE]"
-        RESPONSE=$(curl $URL )
+        RESPONSE=$(curl $URL -s )
         local RESPONSE="$RESPONSE"
     else
         echo -e "$CRED\bRequest failed with status code$CRESET[$RESPONSE]"
