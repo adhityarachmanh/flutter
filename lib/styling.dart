@@ -4,19 +4,18 @@ double defaultMargin = 25;
 
 Color primaryColor = HexColor.fromHex("#191923");
 Color secondaryColor = HexColor.fromHex("#1975df");
+Color lightColor = HexColor.fromHex("#FFFFFF");
+
 
 Color successColor = HexColor.fromHex("#2ecc71");
 Color warningColor = HexColor.fromHex("#f39c12");
 Color errorColor = HexColor.fromHex("#e74c3c");
 
+TextStyle fontVolkorn = GoogleFonts.vollkorn(fontStyle: FontStyle.normal);
 
-TextStyle textPrimary = GoogleFonts.roboto(
-  fontStyle: FontStyle.normal,
-).copyWith(color: primaryColor, fontWeight: FontWeight.w500);
-
-TextStyle textSecondary = GoogleFonts.roboto(
-  fontStyle: FontStyle.normal,
-).copyWith(color: secondaryColor, fontWeight: FontWeight.w500);
+TextStyle textLight = fontVolkorn.copyWith(color: lightColor, fontWeight: FontWeight.w500);
+TextStyle textPrimary = fontVolkorn.copyWith(color: primaryColor, fontWeight: FontWeight.w500);
+TextStyle textSecondary = fontVolkorn.copyWith(color: secondaryColor, fontWeight: FontWeight.w500);
 
 class SizeConfig {
   static MediaQueryData _mediaQueryData;
