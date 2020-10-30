@@ -132,6 +132,7 @@ GenerateHelp(){
     arguments:
         $CGREEN"schematic"$CRESET
             The schematic or collection:schematic to generate.
+            
     Available Schematic:
         service   (s)   create service file                                  $CYELLOW\bsuggested in directory services$CRESET
         model     (m)   create model file                                    $CYELLOW\bsuggested in directory models$CRESET
