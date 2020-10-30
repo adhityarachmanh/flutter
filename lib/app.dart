@@ -17,7 +17,6 @@ part 'shr/routeFunction.dart';
 part 'shr/global.dart';
 part 'shr/api.dart';
 part 'extensions/hex.extension.dart';
-part 'models/auth.model.dart';
 part 'models/user.model.dart';
 part 'services/auth.service.dart';
 part 'screens/splash.screen.dart';
