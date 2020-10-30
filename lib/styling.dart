@@ -2,12 +2,12 @@ part of 'app.dart';
 
 double defaultMargin = 25;
 
-Color primaryColor = HexColor.fromHex("#FF0000");
-Color secondaryColor = HexColor.fromHex("#FFFFFF");
+Color primaryColor = HexColor.fromHex("#191923");
+Color secondaryColor = HexColor.fromHex("#1975df");
 
-Color successColor = Color(0xFF3E9D9D);
-Color warningColor = Color(0xFFFBD460);
-Color errorColor = Color(0xFFFF5C83);
+Color successColor = HexColor.fromHex("#2ecc71");
+Color warningColor = HexColor.fromHex("#f39c12");
+Color errorColor = HexColor.fromHex("#e74c3c");
 
 
 TextStyle textPrimary = GoogleFonts.roboto(
