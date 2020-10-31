@@ -74,7 +74,7 @@ CCreate(){
     CDB=""
     IFS='/' read -ra CTX <<< "$CONTEXT"
     if [ "${CONTEXT:$((${#CONTEXT}-1)):${#CONTEXT}}" == "/" ] || [ "${CONTEXT:0:1}" == "/" ]; then
-        echo -e "$CRED\bError create $2 file \n$CGREEN\bExample:$CYELLOW [FILENAME] $CGREEN|$CYELLOW [DIR]{infinity}/[FILENAME]$CRESET"
+        echo -e "$CRED\bError create $2 file $CYELLOW\nInvalid format '/' at first or last path \n$CGREEN\bExample:$CYELLOW [FILENAME] $CGREEN|$CYELLOW [DIR]{infinity}/[FILENAME]$CRESET"
         return
     elif [ -f $(pwd)/"$CONTEXT"."$TYPE".dart ]; then
         echo -e "$CRED"$CONTEXT"."$TYPE".dart$CRESET$CYELLOW file already exists$CRESET."
