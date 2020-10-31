@@ -14,7 +14,6 @@ class SplashScreen extends StatelessWidget {
     // Local controller
     final state = Provider.of<SplashController>(context);
     final dispatch = Provider.of<SplashController>(context, listen: false);
-    dispatch.onInit();
     
     return Scaffold(
       body: Container(
