@@ -160,7 +160,6 @@ ShowHelp(){
 ShowVersion(){
     echo -e ""
 }
-
 RegRoute(){
     InitLib
     CONTEXT=$1
@@ -177,19 +176,37 @@ RegRoute(){
         TEMPLATE="\t${SN}Screen.routeName: (ctx) => ChangeNotifierProvider.value(value: ${SN}Controller(), child: ${SN}Screen()),\n};"
         CHECKCLASS="$(grep -r "${SN}Screen" $(pwd)/$ROUTE)"
         if [ -f  $DIRSCREEN ] && [ -f  $DIRCONTROLLER ] && [ "$CHECKCLASS" == "" ]; then
-            InitLib
-            sed -i -e "s+};++g" $(pwd)/$ROUTE
-            echo -e "$TEMPLATE" >> $(pwd)/$ROUTE
-            sed -i -e '/^[[:space:]]*$/d'  $(pwd)/$ROUTE
-            echo -e "$CGREEN\bRoute '/${SN}Screen' successfully registered at $ROUTE.$CRESET"
-            if [ -f $(pwd)/route.dart-e ];then
-                rm $(pwd)/route.dart-e
-            fi
+            selection=
+            until [ "$selection" = "n" ]; do
+                echo -e "$CYELLOW\bDo you want to register component  $CGREEN\b${SN}Screen$CYELLOW as navigation? (y/n)$CRESET"
+                old_stty_cfg=$(stty -g)
+                stty raw -echo
+                selection=$( while ! head -c 1 | grep -i '[yn]' ;do true ;done )
+                stty $old_stty_cfg
+                case $selection in
+                    y ) 
+                        InitLib
+                        sed -i -e "s+};++g" $(pwd)/$ROUTE
+                        echo -e "$TEMPLATE" >> $(pwd)/$ROUTE
+                        sed -i -e '/^[[:space:]]*$/d'  $(pwd)/$ROUTE
+                        echo -e "$CGREEN\bRoute '/${SN}Screen' successfully registered at $ROUTE.$CRESET"
+                        if [ -f $(pwd)/route.dart-e ];then
+                            rm $(pwd)/route.dart-e
+                        fi
+                        exit 0
+                    ;;
+                    *)
+                        echo -e "$CGREEN\b${SN}Screen component is not registered as navigation.$CRESET"
+                    ;;
+                esac
+            done
         elif [ -f  $DIRSCREEN ] && [ -f  $DIRCONTROLLER ] && [ "$CHECKCLASS" != "" ]; then
             echo -e "$CGREEN\bRoute '/${SN}Screen' has been exists at $ROUTE.$CRESET"
         fi
     fi
 }
+
+
 
 
 
