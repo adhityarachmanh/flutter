@@ -20,7 +20,7 @@ widgetEX="3e973Sw"
 screenControllerEX="2J8Dl4K"
 
 GTemplate(){
-    HTTPS=$(echo $LINES | curl "https://bit.ly/$1" -s | grep -r https )
+    HTTPS=$(echo $LINES | curl "https://bit.ly/$1" -s | grep https )
     IFS='"' read -ra CX <<< "$HTTPS"
     URL="${CX[1]}"
     RESPONSE=$(curl --write-out '%{http_code}' -s -o /dev/null $URL)
