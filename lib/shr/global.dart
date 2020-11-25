@@ -268,8 +268,8 @@ class Global {
         hT.toLowerCase().substring(1, hT.length));
   }
 
-  getToken(dynamic key) async {
-    String value = await storage.read(key: key);
+  getToken() async {
+    String value = await storage.read(key: enc('authtoken', 1, 6) + '.arh');
     return value;
   }
 
