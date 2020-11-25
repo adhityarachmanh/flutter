@@ -273,8 +273,8 @@ class Global {
     return value;
   }
 
-  createToken() {
-    var newToken = enc(jsonEncode({"token": uuid(), "type": ""}), 1, 6);
+  createToken(String type) {
+    var newToken = enc(jsonEncode({"token": uuid(), "type": type}), 1, 6);
     return "${headToken()} $newToken";
   }
 
