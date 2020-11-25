@@ -4,9 +4,15 @@ class ResponseAPI {
   int s;
   String msg;
   dynamic data;
-  ResponseAPI({@required this.s, this.msg, this.data});
+  String creator;
+  ResponseAPI({@required this.s, this.msg, this.data, this.creator});
   factory ResponseAPI.fromJson(Map<String, dynamic> json) {
-    return ResponseAPI(s: json['s'], msg: json['msg'], data: json['data']);
+    return ResponseAPI(
+      s: json['s'],
+      msg: json['msg'],
+      data: rest.decryptData(json['data']),
+      creator: json['creator'],
+    );
   }
 }
 
@@ -14,11 +20,42 @@ class Rest {
   static String contentType = "Content-Type";
   static String appJSON = "application/json";
   static String multipartFormData = "multipart/form-data";
+  static String authTokenKey = 'Authorization';
   static String xToken = 'XA';
   static String serviceBase = config.res;
   static String api = config.api;
   static String routeAPI(String routeName) {
     return "$api/$serviceBase/$routeName";
+  }
+
+  static dynamic encryptData(data) {
+    Map<String, dynamic> newData = {
+      "creator": config.creatorName,
+      "data": null,
+    };
+    if (config.production) {
+      newData['data'] = global.enc(jsonEncode(data), 2, 6);
+    } else {
+      newData['data'] = data;
+    }
+    return jsonEncode(newData);
+  }
+
+  static createHeaders(_headers, {bool middleware = false}) {
+    var token = global.getToken();
+    if (token != null && middleware) {
+      _headers[authTokenKey] = token;
+    }
+    return {
+      "headers": _headers,
+    };
+  }
+
+  dynamic decryptData(ResponseAPI response) {
+    if (config.production && response.data != null) {
+      response.data = jsonDecode(global.dec(response.data, 2, 6));
+    }
+    return response;
   }
 
   Future get(String routeName, {Map<String, dynamic> headers}) async {
@@ -29,8 +66,7 @@ class Rest {
   Future put(String routeName,
       {Map<String, dynamic> data, Map<String, dynamic> headers}) async {
     var response = await http.post(routeAPI(routeName),
-        headers: headers, body: jsonEncode(data));
-
+        headers: headers, body: encryptData(data));
     if (response.statusCode == 200) return response;
   }
 
