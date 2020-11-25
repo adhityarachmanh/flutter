@@ -58,15 +58,20 @@ class Rest {
     return response;
   }
 
-  Future get(String routeName, {Map<String, dynamic> headers}) async {
-    var response = await http.get(routeAPI(routeName), headers: headers);
+  Future get(String routeName,
+      {Map<String, dynamic> headers, middleware = false}) async {
+    var response = await http.get(routeAPI(routeName),
+        headers: createHeaders(headers, middleware: middleware));
     if (response.statusCode == 200) return response;
   }
 
   Future put(String routeName,
-      {Map<String, dynamic> data, Map<String, dynamic> headers}) async {
+      {Map<String, dynamic> data,
+      Map<String, dynamic> headers,
+      middleware = true}) async {
     var response = await http.post(routeAPI(routeName),
-        headers: headers, body: encryptData(data));
+        headers: createHeaders(headers, middleware: middleware),
+        body: encryptData(data));
     if (response.statusCode == 200) return response;
   }
 
