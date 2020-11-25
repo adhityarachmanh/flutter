@@ -7,7 +7,8 @@ var constTrue = true,
     phoneRegEx = new RegExp(r"^(^08|^62)(\d{3,4}?){2}\d{3,4}$"),
     myValue = {},
     asciiBitAmt = 8,
-    defaultBaseNBitLen = 7;
+    defaultBaseNBitLen = 7,
+    storage = new FlutterSecureStorage();
 String noSpaceString(value) {
   return value.replaceAll(" ", "");
 }
@@ -235,6 +236,12 @@ class Global {
     return result;
   }
 
+  uuid() {
+    var uuid = Uuid();
+    uuid.v5(Uuid.NAMESPACE_URL, 'www.google.com');
+    return uuid;
+  }
+
   enc(source, edType, nBitLen) {
     if (edType == null) {
       return nBitEnc(source, null, null);
@@ -253,6 +260,28 @@ class Global {
       return nBitDec(source, nBitLen != null ? nBitLen : 6,
           isNumber(edType) ? genKey(edType) : edType);
     }
+  }
+
+  headToken() {
+    var hT = config.creator;
+    return (hT.toUpperCase().substring(0, 1) +
+        hT.toLowerCase().substring(1, hT.length));
+  }
+
+  getToken(dynamic key) async {
+    String value = await storage.read(key: key);
+    return value;
+  }
+
+  createToken() {
+    var newToken = enc(jsonEncode({"token": uuid(), "type": ""}), 1, 6);
+    return "${headToken()} $newToken";
+  }
+
+  setToken(token) async {
+    await storage.write(
+        key: enc('authtoken', 1, 6) + '.' + config.creator.toLowerCase(),
+        value: token);
   }
 }
 
