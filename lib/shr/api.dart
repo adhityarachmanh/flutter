@@ -61,12 +61,11 @@ class Rest {
     return _headers;
   }
 
-
   Future get(String routeName,
       {Map<String, String> headers, middleware = false}) async {
     var _headers = headerAsConfig(headers, middleware: middleware);
     var response = await http.get(routeAPI(routeName), headers: _headers);
-    return response;
+    if (response.statusCode == 200) return response;
   }
 
   Future put(String routeName,
@@ -76,7 +75,7 @@ class Rest {
     var _headers = headerAsConfig(headers, middleware: middleware);
     var response = await http.post(routeAPI(routeName),
         headers: _headers, body: encryptData(data));
-    return response;
+    if (response.statusCode == 200) return response;
   }
 
   Future upload(String routeName, File file,
