@@ -69,7 +69,7 @@ class Rest {
     return response;
   }
 
-  Future post(String routeName,
+  Future put(String routeName,
       {Map<String, dynamic> data,
       Map<String, String> headers,
       middleware = false}) async {
