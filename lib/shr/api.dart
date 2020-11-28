@@ -7,10 +7,13 @@ class ResponseAPI {
   String creator;
   ResponseAPI({@required this.s, this.msg, this.data, this.creator});
   factory ResponseAPI.fromJson(Map<String, dynamic> json) {
+    if (config.production && json['data'] != null) {
+      json['data'] = jsonDecode(global.dec(json['data'], 2, 6));
+    }
     return ResponseAPI(
       s: json['s'],
       msg: json['msg'],
-      data: rest.decryptData(json['data']),
+      data: json['data'],
       creator: json['creator'],
     );
   }
@@ -20,12 +23,18 @@ class Rest {
   static String contentType = "Content-Type";
   static String appJSON = "application/json";
   static String multipartFormData = "multipart/form-data";
-  static String authTokenKey = 'Authorization';
+  static String authTokenKey = "Authorization";
   static String xToken = 'XA';
   static String serviceBase = config.res;
   static String api = config.api;
+  static String version = config.version;
   static String routeAPI(String routeName) {
-    return "$api/$serviceBase/$routeName";
+    String url = "$version/$serviceBase/$routeName";
+    if (config.production) {
+      url = global.enc("$version/$serviceBase/$routeName", 1, 6);
+      url += ".${config.creator.toLowerCase()}";
+    }
+    return "$api/$url";
   }
 
   static dynamic encryptData(data) {
@@ -38,41 +47,36 @@ class Rest {
     } else {
       newData['data'] = data;
     }
+
     return jsonEncode(newData);
   }
 
-  static createHeaders(_headers, {bool middleware = false}) {
+  Map<String, String> headerAsConfig(Map<String, String> _headers,
+      {bool middleware = false}) {
     var token = global.getToken();
     if (token != null && middleware) {
       _headers[authTokenKey] = token;
     }
-    return {
-      "headers": _headers,
-    };
+    _headers[contentType] = appJSON;
+    return _headers;
   }
 
-  dynamic decryptData(ResponseAPI response) {
-    if (config.production && response.data != null) {
-      response.data = jsonDecode(global.dec(response.data, 2, 6));
-    }
+
+  Future get(String routeName,
+      {Map<String, String> headers, middleware = false}) async {
+    var _headers = headerAsConfig(headers, middleware: middleware);
+    var response = await http.get(routeAPI(routeName), headers: _headers);
     return response;
   }
 
-  Future get(String routeName,
-      {Map<String, dynamic> headers, middleware = false}) async {
-    var response = await http.get(routeAPI(routeName),
-        headers: createHeaders(headers, middleware: middleware));
-    if (response.statusCode == 200) return response;
-  }
-
-  Future put(String routeName,
+  Future post(String routeName,
       {Map<String, dynamic> data,
-      Map<String, dynamic> headers,
-      middleware = true}) async {
+      Map<String, String> headers,
+      middleware = false}) async {
+    var _headers = headerAsConfig(headers, middleware: middleware);
     var response = await http.post(routeAPI(routeName),
-        headers: createHeaders(headers, middleware: middleware),
-        body: encryptData(data));
-    if (response.statusCode == 200) return response;
+        headers: _headers, body: encryptData(data));
+    return response;
   }
 
   Future upload(String routeName, File file,
