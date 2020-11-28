@@ -1,11 +1,11 @@
 part of 'app.dart';
 
 class Config {
-  String api = 'http//example.com';
+  String api = 'http://10.0.2.2:PORT';// AVD DEFAULT IP
   String res = 'api';
   String version = 'v1.0';
-  String creator = '';
-  String creatorName = "";
+  String creator = 'CREATOR';
+  String creatorName = "CREATOR NAME";
   bool production = false;
 }
 
