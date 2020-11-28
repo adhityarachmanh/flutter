@@ -236,10 +236,10 @@ class Global {
     return result;
   }
 
-  uuid() {
+  String uuid() {
     var uuid = Uuid();
-    uuid.v5(Uuid.NAMESPACE_URL, 'www.google.com');
-    return uuid;
+    var strUUID = uuid.v5(Uuid.NAMESPACE_URL, 'www.google.com');
+    return strUUID;
   }
 
   enc(source, edType, nBitLen) {
