@@ -238,7 +238,7 @@ class Global {
 
   String uuid() {
     var uuid = Uuid();
-    var strUUID = uuid.v5(Uuid.NAMESPACE_URL, 'www.google.com');
+    var strUUID = uuid.v4();
     return strUUID;
   }
 
@@ -273,8 +273,13 @@ class Global {
     return value;
   }
 
-  createToken(String type) {
-    var newToken = enc(jsonEncode({"token": uuid(), "type": type}), 1, 6);
+  createToken(String type, {String token = ""}) {
+    var _token;
+    _token = uuid();
+    if (token != "") {
+      _token = token;
+    }
+    var newToken = enc(jsonEncode({"token": _token, "type": type}), 1, 6);
     return "${headToken()} $newToken";
   }
 
