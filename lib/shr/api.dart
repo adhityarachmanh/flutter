@@ -51,9 +51,9 @@ class Rest {
     return jsonEncode(newData);
   }
 
-  Map<String, String> headerAsConfig(Map<String, String> _headers,
-      {bool middleware = false}) {
-    var token = global.getToken();
+  Future<Map<String, String>> headerAsConfig(Map<String, String> _headers,
+      {bool middleware = false}) async {
+    var token = await global.getToken();
     if (token != null && middleware) {
       _headers[authTokenKey] = token;
     }
@@ -64,7 +64,7 @@ class Rest {
   Future get(String routeName,
       {Map<String, String> headers, middleware = false}) async {
     var _headers = headerAsConfig(headers, middleware: middleware);
-    var response = await http.get(routeAPI(routeName), headers: _headers);
+    var response = await http.get(routeAPI(routeName), headers: await _headers);
     if (response.statusCode == 200) return response;
   }
 
@@ -74,7 +74,7 @@ class Rest {
       middleware = false}) async {
     var _headers = headerAsConfig(headers, middleware: middleware);
     var response = await http.post(routeAPI(routeName),
-        headers: _headers, body: encryptData(data));
+        headers: await _headers, body: encryptData(data));
     if (response.statusCode == 200) return response;
   }
 
