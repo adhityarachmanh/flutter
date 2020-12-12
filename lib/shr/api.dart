@@ -24,13 +24,18 @@ class Rest {
   static String appJSON = "application/json";
   static String authTokenKey = "Authorization";
   static String routeAPI(String routeName) {
-    String url = config.apiConfig['FORMAT'];
-    List<String> formatSplit = url.split("/");
+    String url = "${config.apiConfig['API_URL']}/";
+    String format = config.apiConfig['FORMAT'];
+    List<String> formatSplit = format.split("/");
     for (var i = 0; i < formatSplit.length; i++) {
       var key = formatSplit[i];
-      url.replaceAll(key, config.apiConfig[key]);
+      format = format.replaceAll(key, config.apiConfig[key]);
     }
-    url += "/$routeName";
+    format += "/$routeName";
+    if (config.encryptionMode) {
+      format = global.enc(format, 1, 6) + "." + config.creator.toLowerCase();
+    }
+    url += format;
     return url;
   }
 
