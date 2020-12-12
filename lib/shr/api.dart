@@ -22,7 +22,6 @@ class ResponseAPI {
 class Rest {
   static String contentType = "Content-Type";
   static String appJSON = "application/json";
-  static String multipartFormData = "multipart/form-data";
   static String authTokenKey = "Authorization";
   static String routeAPI(String routeName) {
     String url = config.apiConfig['FORMAT'];
