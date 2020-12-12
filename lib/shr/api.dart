@@ -7,7 +7,7 @@ class ResponseAPI {
   String creator;
   ResponseAPI({@required this.s, this.msg, this.data, this.creator});
   factory ResponseAPI.fromJson(Map<String, dynamic> json) {
-    if (config.production && json['data'] != null) {
+    if (config.encryptionMode && json['data'] != null) {
       json['data'] = jsonDecode(global.dec(json['data'], 2, 6));
     }
     return ResponseAPI(
@@ -24,17 +24,15 @@ class Rest {
   static String appJSON = "application/json";
   static String multipartFormData = "multipart/form-data";
   static String authTokenKey = "Authorization";
-  static String xToken = 'XA';
-  static String serviceBase = config.res;
-  static String api = config.api;
-  static String version = config.version;
   static String routeAPI(String routeName) {
-    String url = "$version/$serviceBase/$routeName";
-    if (config.production) {
-      url = global.enc("$version/$serviceBase/$routeName", 1, 6);
-      url += ".${config.creator.toLowerCase()}";
+    String url = config.apiConfig['FORMAT'];
+    List<String> formatSplit = url.split("/");
+    for (var i = 0; i < formatSplit.length; i++) {
+      var key = formatSplit[i];
+      url.replaceAll(key, config.apiConfig[key]);
     }
-    return "$api/$url";
+    url += "/$routeName";
+    return url;
   }
 
   static dynamic encryptData(data) {
@@ -42,7 +40,7 @@ class Rest {
       "creator": config.creatorName,
       "data": null,
     };
-    if (config.production) {
+    if (config.encryptionMode) {
       newData['data'] = global.enc(jsonEncode(data), 2, 6);
     } else {
       newData['data'] = data;
