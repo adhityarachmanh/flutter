@@ -20,6 +20,7 @@ THIDE="\e[8m"
 MSGINFO="$CBLUE[INFO]$CGREEN"
 MSGSUCCESS="$CGREEN[SUCCESS]$CGREEN"
 MSGERROR="$CRED[ERROR]$CGREEN"
+MSGWARNING="$CYELLOW[WARNING]$CGREEN"
 
 
 
@@ -224,7 +225,7 @@ RegRoute(){
                         exit 0
                     ;;
                     *)
-                        echo -e "$MSGERROR${SN}Screen component is not registered as navigation.$CRESET"
+                        echo -e "$MSGWARNING ${SN}Screen component is not registered as navigation.$CRESET"
                     ;;
                 esac
             done
