@@ -3,7 +3,7 @@
 # ver : 1.0
 
 # INFO FILE
-CREATOR="Adhitya Rachman H"
+CREATOR=$(whoami)
 PRODUCT="ARH"
 VERSION="v1.0"
 DATE=$(date)
