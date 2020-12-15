@@ -1,7 +1,13 @@
 #! /bin/bash
-# cre : arh 
-# upd : arh 
+# creator : Adhitya Rachman H
 # ver : 1.0
+
+# INFO FILE
+CREATOR="Adhitya Rachman H"
+PRODUCT="ARH"
+VERSION="v1.0"
+DATE=$(date)
+
 
 CBLUE="\x1b[34;1m"
 CRED="\x1b[31;1m"
@@ -13,6 +19,9 @@ THIDE="\e[8m"
 
 MODULE="app.dart"
 ROUTE="route.dart"
+
+# LINK
+creatorEX="3qYWV4P"
 modelsEX="3mDsDlv"
 serviceEX="3mDsiiJ"
 screenEX="2HNVjJq"
@@ -20,6 +29,8 @@ widgetEX="3e973Sw"
 screenControllerEX="2J8Dl4K"
 
 GTemplate(){
+    TNAME="$(tr '[:lower:]' '[:upper:]' <<< ${2})"
+    echo -e "$CGREEN\bRequest$CYELLOW $TNAME TEMPLATE$CGREEN from storage$CRESET"
     HTTPS=$(echo $LINES | curl "https://bit.ly/$1" -s | grep https )
     IFS='"' read -ra CX <<< "$HTTPS"
     URL="${CX[1]}"
@@ -33,6 +44,7 @@ GTemplate(){
     fi
   
 }
+
 
 GService(){
     InitLib
@@ -91,9 +103,19 @@ CCreate(){
                 echo -e "\a$CRED\bDuplicate class name $CGREEN${SN}${TN}$CRESET at $CYELLOW$CLS$CRESET"
                 return
             fi
-            GTemplate $TMPLTURL
+            MODULE_NAME="${i} ${TYPE}"
+            MODULE_NAME="$(tr '[:lower:]' '[:upper:]' <<< ${MODULE_NAME})"
+            GTemplate $creatorEX "CREATOR"
+            TMPLOUT+="$RESPONSE"
+            MARKCONTEXT="MODULE_NAME,CREATOR,DATE,PRODUCT,VERSION"
+            IFS=',' read -ra MARKCTX <<< "$MARKCONTEXT"
+            for j in "${MARKCTX[@]}"
+            do
+                TMPLOUT=$(echo "$TMPLOUT" | sed -e "s+_${j}_+${!j}+g")
+            done
+            GTemplate $TMPLTURL $TYPE
             CDB="$(tr '[:upper:]' '[:lower:]' <<< ${CDB})"
-            TMPLOUT+="part of '${CDB}${MODULE}';\n"
+            TMPLOUT+="\n\npart of '${CDB}${MODULE}';\n"
             TMPLOUT+=$(echo "\n$RESPONSE" | sed -e "s+Example+${SN}+g")
             i="$(tr '[:upper:]' '[:lower:]' <<< ${i})"
             echo -e "$TMPLOUT" >> $(pwd)/"${i}"."${TYPE}".dart
@@ -122,7 +144,7 @@ AppRegister(){
    InitLib
     echo -e "\npart '$1';" >> $(pwd)/$MODULE
     sed -i -e '/^[[:space:]]*$/d'  $(pwd)/$MODULE
-    echo -e "$CGREEN$1 successfully registered at $MODULE$CRESET"
+    echo -e "$CYELLOW$1$CGREEN successfully registered at $CYELLOW$MODULE$CRESET"
     if [ -f $(pwd)/app.dart-e ];then
         rm $(pwd)/app.dart-e
     fi
@@ -249,4 +271,5 @@ case "$1" in
         echo -e 'For more detailed help run "--help"'
         ;;
 esac
+
 exit 0
