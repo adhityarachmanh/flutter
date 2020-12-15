@@ -17,6 +17,12 @@ CRESET="\x1b[39;49;00m"
 TERR="\e[1;40;97m"
 THIDE="\e[8m"
 
+MSGINFO="$CBLUE[INFO]$CGREEN"
+MSGSUCCESS="$CGREEN[SUCCESS]$CGREEN"
+MSGERROR="$CRED[ERROR]$CGREEN"
+
+
+
 MODULE="app.dart"
 ROUTE="route.dart"
 
@@ -30,7 +36,7 @@ screenControllerEX="2J8Dl4K"
 
 GTemplate(){
     TNAME="$(tr '[:lower:]' '[:upper:]' <<< ${2})"
-    echo -e "$CGREEN\bRequest$CYELLOW $TNAME TEMPLATE$CGREEN from storage$CRESET"
+    echo -e "$MSGINFO Request $CYELLOW$TNAME TEMPLATE$CGREEN from storage."
     HTTPS=$(echo $LINES | curl "https://bit.ly/$1" -s | grep https )
     IFS='"' read -ra CX <<< "$HTTPS"
     URL="${CX[1]}"
@@ -39,7 +45,7 @@ GTemplate(){
         RESPONSE=$(curl $URL -s )
         local RESPONSE="$RESPONSE"
     else
-        echo -e "$CRED\bRequest failed with status code$CRESET[$RESPONSE]"
+        echo -e "$MSGERROR Request failed with status code[$RESPONSE]"
         exit 0
     fi
   
@@ -73,7 +79,7 @@ GWidget(){
 
 CCreate(){
     if [ "$1" == "" ]; then
-        echo -e "$CRED\bError create $2 file \n$CGREEN\bExample:$CYELLOW [FILENAME] $CGREEN|$CYELLOW [DIR]{infinity}/[FILENAME]$CRESET"
+        echo -e "$MSGERROR Error create $2 file \n$CGREEN\bExample:$CYELLOW [FILENAME] $CGREEN|$CYELLOW [DIR]{infinity}/[FILENAME]."
         return
     fi
     CONTEXT=$1
@@ -86,10 +92,10 @@ CCreate(){
     CDB=""
     IFS='/' read -ra CTX <<< "$CONTEXT"
     if [ "${CONTEXT:$((${#CONTEXT}-1)):${#CONTEXT}}" == "/" ] || [ "${CONTEXT:0:1}" == "/" ]; then
-        echo -e "$CRED\bError create $2 file $CYELLOW\nInvalid format '/' at first or last path \n$CGREEN\bExample:$CYELLOW [FILENAME] $CGREEN|$CYELLOW [DIR]{infinity}/[FILENAME]$CRESET"
+        echo -e "$MSGERROR Error create $2 file. \n$MSGERROR Invalid format '/' at first or last path. \n$MSGINFO Example:$CYELLOW [FILENAME] $CGREEN|$CYELLOW [DIR]{infinity}/[FILENAME]"
         return
     elif [ -f $(pwd)/"$CONTEXT"."$TYPE".dart ]; then
-        echo -e "$CRED"$CONTEXT"."$TYPE".dart$CRESET$CYELLOW file already exists$CRESET."
+        echo -e "$MSGERROR "$CONTEXT"."$TYPE".dart file already exists."
         return
     fi
     for i in "${CTX[@]}"
@@ -100,7 +106,7 @@ CCreate(){
             IFS=':' read -ra CLS <<< "$CHECKCLASS"
             CLS=$(echo ${CLS[0]} | sed -e "s+${DIR}++g" )
             if [ "$CHECKCLASS" != "" ]; then
-                echo -e "\a$CRED\bDuplicate class name $CGREEN${SN}${TN}$CRESET at $CYELLOW$CLS$CRESET"
+                echo -e "$MSGERROR Duplicate class name $CGREEN${SN}${TN} at $CYELLOW$CLS."
                 return
             fi
             MODULE_NAME="${i} ${TYPE}"
@@ -144,7 +150,7 @@ AppRegister(){
    InitLib
     echo -e "\npart '$1';" >> $(pwd)/$MODULE
     sed -i -e '/^[[:space:]]*$/d'  $(pwd)/$MODULE
-    echo -e "$CYELLOW$1$CGREEN successfully registered at $CYELLOW$MODULE$CRESET"
+    echo -e "$MSGSUCCESS successfully registered at $CYELLOW$MODULE$CRESET."
     if [ -f $(pwd)/app.dart-e ];then
         rm $(pwd)/app.dart-e
     fi
@@ -211,14 +217,14 @@ RegRoute(){
                         sed -i -e "s+};++g" $(pwd)/$ROUTE
                         echo -e "$TEMPLATE" >> $(pwd)/$ROUTE
                         sed -i -e '/^[[:space:]]*$/d'  $(pwd)/$ROUTE
-                        echo -e "$CGREEN\bRoute '/${SN}Screen' successfully registered at $ROUTE.$CRESET"
+                        echo -e "$MSGSUCCESS Route '/${SN}Screen' successfully registered at $ROUTE.$CRESET"
                         if [ -f $(pwd)/route.dart-e ];then
                             rm $(pwd)/route.dart-e
                         fi
                         exit 0
                     ;;
                     *)
-                        echo -e "$CGREEN\b${SN}Screen component is not registered as navigation.$CRESET"
+                        echo -e "$MSGERROR${SN}Screen component is not registered as navigation.$CRESET"
                     ;;
                 esac
             done
