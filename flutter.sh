@@ -2,7 +2,7 @@
 # creator : Adhitya Rachman H
 # ver : 1.0
 
-# INFO FILE
+# DEFAULT INFO FROM PC [INFO FILE]
 CREATOR=$(whoami)
 PRODUCT="ARH"
 VERSION="v1.0"
