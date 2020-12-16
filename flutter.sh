@@ -18,6 +18,7 @@ CRESET="\x1b[39;49;00m"
 TERR="\e[1;40;97m"
 THIDE="\e[8m"
 
+PROGRESSBAR=false
 MSGINFO="$CBLUE[INFO]$CGREEN"
 MSGSUCCESS="$CGREEN[SUCCESS]$CGREEN"
 MSGERROR="$CRED[ERROR]$CGREEN"
@@ -38,6 +39,9 @@ widgetEX="3e973Sw"
 screenControllerEX="2J8Dl4K"
 
 ProgressBar(){
+    if [ "$PROGRESSBAR" = false ]; then
+        return
+    fi
     max=100
     bar=""
     bk=""
@@ -185,7 +189,7 @@ AppRegister(){
     echo -e "\npart '$1';" >> $(pwd)/$MODULE
     sed -i -e '/^[[:space:]]*$/d'  $(pwd)/$MODULE
     ProgressBar 100 "Process Finish"
-    # echo -e "$MSGSUCCESS Template $CYELLOW$2$CGREEN successfully registered at $MODULE"
+    echo -e "$MSGSUCCESS Template $CYELLOW$2$CGREEN successfully registered at $MODULE"
     if [ -f $(pwd)/app.dart-e ];then
         rm $(pwd)/app.dart-e
 fi
@@ -276,7 +280,7 @@ RegRoute(){
                         echo -e "$TEMPLATE" >> $(pwd)/$ROUTE
                         sed -i -e '/^[[:space:]]*$/d'  $(pwd)/$ROUTE
                         ProgressBar 100 "Process Finish"
-                        # echo -e "$MSGSUCCESS Route $CYELLOW'/${SN}Screen'$CGREEN successfully registered at $ROUTE.$CRESET"
+                        echo -e "$MSGSUCCESS Route $CYELLOW'/${SN}Screen'$CGREEN successfully registered at $ROUTE.$CRESET"
                         if [ -f $(pwd)/route.dart-e ];then
                             rm $(pwd)/route.dart-e
                         fi
