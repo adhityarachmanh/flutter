@@ -4,7 +4,7 @@
 
 # DEFAULT INFO FROM PC [INFO FILE]
 CREATOR=$(whoami)
-PRODUCT="ARH"
+PRODUCT="HIPMINET"
 VERSION="v1.0"
 DATE=$(date)
 
@@ -27,6 +27,7 @@ MSGWARNING="$CYELLOW[WARNING]$CGREEN"
 MODULE="app.dart"
 ROUTE="route.dart"
 
+
 # LINK
 creatorEX="2Wdeb8B"
 modelsEX="3mDsDlv"
@@ -35,15 +36,41 @@ screenEX="2HNVjJq"
 widgetEX="3e973Sw"
 screenControllerEX="2J8Dl4K"
 
+ProgressBar(){
+    max=100
+    bar=""
+    bk=""
+    sp=""
+    for (( k=0; k <= $max; ++k ))
+    do
+        sp+=" "
+    done
+    for (( l=0; l <= $1; ++l ))
+    do
+        bar+="#"
+        bk+="\b"
+    done
+    echo -ne "${bar}${sp}${bk} [$1%] $2\r"
+    if [ $1 == 100 ]; then
+        echo -ne '\n'
+    fi
+    sleep .1
+}
+
 GTemplate(){
     TNAME="$(tr '[:lower:]' '[:upper:]' <<< ${2})"
-    echo -e "$MSGINFO Request $CYELLOW$TNAME TEMPLATE$CGREEN from storage."
+    echo -e "$MSGINFO Get $CYELLOW$TNAME TEMPLATE$CGREEN from storage."
+    ProgressBar 0 "Prepare Process"
+    ProgressBar 30 "Grep Link"
     HTTPS=$(echo $LINES | curl "https://bit.ly/$1" -s | grep https )
+    ProgressBar 50 "Check Link"
     IFS='"' read -ra CX <<< "$HTTPS"
     URL="${CX[1]}"
     RESPONSE=$(curl --write-out '%{http_code}' -s -o /dev/null $URL)
+    ProgressBar 75 "Get Template"
     if [ "$RESPONSE" == "200" ];then
         RESPONSE=$(curl $URL -s )
+        ProgressBar 100 "Process Finish"
         local RESPONSE="$RESPONSE"
     else
         echo -e "$MSGERROR Request failed with status code[$RESPONSE]"
@@ -80,7 +107,7 @@ GWidget(){
 
 CCreate(){
     if [ "$1" == "" ]; then
-        echo -e "$MSGERROR Error create $2 file \n$CGREEN\bExample:$CYELLOW [FILENAME] $CGREEN|$CYELLOW [DIR]{infinity}/[FILENAME]."
+        echo -e "$MSGERROR Error create $2 file \n$CGREEN\bFormat:$CYELLOW [FILENAME] $CGREEN|$CYELLOW [DIR]{infinity}/[FILENAME]."
         return
     fi
     CONTEXT=$1
@@ -93,7 +120,7 @@ CCreate(){
     CDB=""
     IFS='/' read -ra CTX <<< "$CONTEXT"
     if [ "${CONTEXT:$((${#CONTEXT}-1)):${#CONTEXT}}" == "/" ] || [ "${CONTEXT:0:1}" == "/" ]; then
-        echo -e "$MSGERROR Error create $2 file. \n$MSGERROR Invalid format '/' at first or last path. \n$MSGINFO Example:$CYELLOW [FILENAME] $CGREEN|$CYELLOW [DIR]{infinity}/[FILENAME]"
+        echo -e "$MSGERROR Error create $2 file. \n$MSGERROR Invalid format '/' at first or last path. \n$MSGINFO  Format:$CYELLOW [FILENAME] $CGREEN|$CYELLOW [DIR]{infinity}/[FILENAME]"
         return
     elif [ -f $(pwd)/"$CONTEXT"."$TYPE".dart ]; then
         echo -e "$MSGERROR "$CONTEXT"."$TYPE".dart file already exists."
@@ -121,13 +148,18 @@ CCreate(){
                 TMPLOUT=$(echo "$TMPLOUT" | sed -e "s+_${j}_+${!j}+g")
             done
             GTemplate $TMPLTURL $TYPE
+            echo -e "$MSGINFO Create $CYELLOW${SN}${TN}$CGREEN template."
+            ProgressBar 0 "Prepare Process"
+            ProgressBar 10 "Replace Template"
             CDB="$(tr '[:upper:]' '[:lower:]' <<< ${CDB})"
             TMPLOUT+="\n\npart of '${CDB}${MODULE}';\n"
             TMPLOUT+=$(echo "\n$RESPONSE" | sed -e "s+Example+${SN}+g")
+            ProgressBar 20 "Write Template"
             i="$(tr '[:upper:]' '[:lower:]' <<< ${i})"
             echo -e "$TMPLOUT" >> $(pwd)/"${i}"."${TYPE}".dart
             CONTEXT="$(tr '[:upper:]' '[:lower:]' <<< ${CONTEXT})"
-            AppRegister  "${CONTEXT}"."${TYPE}".dart
+            ProgressBar 50 "Register Template"
+            AppRegister  "${CONTEXT}"."${TYPE}".dart "${SN}${TN}"
         else
             if [ ! -d $(pwd)/$i ]; then
                 mkdir $(pwd)/$i
@@ -148,13 +180,14 @@ InitLib(){
     cd lib
 }
 AppRegister(){
-   InitLib
+    InitLib
     echo -e "\npart '$1';" >> $(pwd)/$MODULE
     sed -i -e '/^[[:space:]]*$/d'  $(pwd)/$MODULE
-    echo -e "$MSGSUCCESS successfully registered at $CYELLOW$MODULE$CRESET."
+    ProgressBar 100 "Process Finish"
+    # echo -e "$MSGSUCCESS Template $CYELLOW$2$CGREEN successfully registered at $MODULE"
     if [ -f $(pwd)/app.dart-e ];then
         rm $(pwd)/app.dart-e
-    fi
+fi
 }
 
 GenerateHelp(){
@@ -180,10 +213,30 @@ GenerateHelp(){
     echo -e "$TEMPLATE"
 }
 
+PackageHelp(){
+    TEMPLATE=$(echo -e """
+    $CGREEN \bPackage name application.$CRESET
+    usage: package <schematic> [options]
+    arguments:
+        $CGREEN"schematic"$CRESET
+            The schematic or collection:schematic to package.
+
+    Available Schematic:
+        change (c)   change package name
+        info   (w)   info current name package                            
+    
+    Example:
+        package  change com.arh.adhitya | p c com.arh.adhitya
+        package  info
+    """)
+    echo -e "$TEMPLATE"
+}
+
 ShowHelp(){
     echo -e """
     Available Commands:
         generate (g) Generates files based on a schematic.
+        package (p) Info package and change package.
     """
 }
 ShowVersion(){
@@ -214,11 +267,15 @@ RegRoute(){
                 stty $old_stty_cfg
                 case $selection in
                     y ) 
+                        echo -e "$MSGINFO Register route."
+                        ProgressBar 0 "Prepare Process"
                         InitLib
+                        ProgressBar 50 "Add Route"
                         sed -i -e "s+};++g" $(pwd)/$ROUTE
                         echo -e "$TEMPLATE" >> $(pwd)/$ROUTE
                         sed -i -e '/^[[:space:]]*$/d'  $(pwd)/$ROUTE
-                        echo -e "$MSGSUCCESS Route '/${SN}Screen' successfully registered at $ROUTE.$CRESET"
+                        ProgressBar 100 "Process Finish"
+                        # echo -e "$MSGSUCCESS Route $CYELLOW'/${SN}Screen'$CGREEN successfully registered at $ROUTE.$CRESET"
                         if [ -f $(pwd)/route.dart-e ];then
                             rm $(pwd)/route.dart-e
                         fi
@@ -230,13 +287,82 @@ RegRoute(){
                 esac
             done
         elif [ -f  $DIRSCREEN ] && [ -f  $DIRCONTROLLER ] && [ "$CHECKCLASS" != "" ]; then
-            echo -e "$CGREEN\bRoute '/${SN}Screen' has been exists at $ROUTE.$CRESET"
+            echo -e "$CGREEN\bRoute $CYELLOW'/${SN}Screen'$CGREEN has been exists at $ROUTE.$CRESET"
         fi
     fi
 }
 
 
+PkgChange(){
+    EXE=$0
+    DIR=$(dirname "${EXE}")
+    cd $DIR
+    NEWPKG="$1"
+    PKG=$(grep -r 'package=' $DIR)
+    IFS=':' read -ra PKG <<< "$PKG"
+    IFS='=' read -ra PKG <<< "${PKG[1]}"
+    IFS='"' read -ra PKG <<< "${PKG[1]}"
+    CRNTPKG="${PKG[1]}"
+    if [ "$CRNTPKG" == "$NEWPKG" ];then
+        echo -e "$MSGERROR Current package name $CYELLOW$CRNTPKG$CGREEN same with new package name $CYELLOW$NEWPKG"
+        return
+    fi
+    echo -e "$MSGINFO Change package name."
+    ProgressBar 0 "Prepare Process"
+    FLIST=($(grep -HRl "${PKG[1]}" $DIR))
+    ProgressBar 0 "${#FLIST[@]} File Found"
+    sleep 1
+    CFC=1
+    for j in "${FLIST[@]}"
+    do
+        PRGS=$((10*$CFC))
+        if (( $PRGS > 100 ));then
+            PRGS=100
+        else
+            PRGS=$((20+$PRGS))
+        fi
+        ProgressBar $PRGS "Change file [$CFC/${#FLIST[@]}]"
+        sed -i -e "s+$CRNTPKG+$NEWPKG+g" $j
+        if [ -f $j-e ];then
+            rm $j-e
+        fi
+        CFC=$(($CFC+1))
+        sleep .5
+    done
+    ProgressBar 100 "Process Finish$CRESET"
+    flutter clean
+    echo -e "$MSGSUCCESS Change package name $CYELLOW$CRNTPKG$CGREEN to $CYELLOW$NEWPKG"
+ 
+}
+PkgInfo(){
+    EXE=$0
+    DIR=$(dirname "${EXE}")
+    cd $DIR
+    PKG=$(grep -r 'package=' $DIR)
+    IFS=':' read -ra PKG <<< "$PKG"
+    IFS='=' read -ra PKG <<< "${PKG[1]}"
+    IFS='"' read -ra PKG <<< "${PKG[1]}"
+    echo -e "$MSGINFO Current name package $CYELLOW${PKG[1]}"
+}
 
+
+
+Package(){
+    case "$1" in
+        change|c)
+            PkgChange $2
+            ;;
+        info|i)
+            PkgInfo
+            ;;
+        --help|--h|help|h)
+            PackageHelp
+            ;;
+        *)
+            echo -e 'For more detailed help run "package --help"'
+            ;;
+    esac
+}
 
 
 Generate(){
@@ -267,6 +393,9 @@ Generate(){
 case "$1" in
     generate|g)
         Generate $2 $3
+        ;;
+    package|p)
+        Package $2 $3
         ;;
     --help|--h|help|h)
         ShowHelp
