@@ -5,6 +5,7 @@
 # DEFAULT INFO FROM PC [INFO FILE]
 CREATOR=$(whoami)
 PRODUCT="HIPMINET"
+OS="$OSTYPE"
 VERSION="v1.0"
 DATE=$(date)
 
@@ -141,7 +142,7 @@ CCreate(){
             MODULE_NAME="$(tr '[:lower:]' '[:upper:]' <<< ${MODULE_NAME})"
             GTemplate $creatorEX "CREATOR"
             TMPLOUT+="$RESPONSE"
-            MARKCONTEXT="MODULE_NAME,CREATOR,DATE,PRODUCT,VERSION"
+            MARKCONTEXT="MODULE_NAME,CREATOR,DATE,PRODUCT,VERSION,OS"
             IFS=',' read -ra MARKCTX <<< "$MARKCONTEXT"
             for j in "${MARKCTX[@]}"
             do
@@ -407,5 +408,6 @@ case "$1" in
         echo -e 'For more detailed help run "--help"'
         ;;
 esac
+
 
 exit 0
