@@ -224,7 +224,7 @@ PackageHelp(){
 
     Available Schematic:
         change (c)   change package name
-        info   (w)   info current name package                            
+        info   (w)   info current package name                         
     
     Example:
         package  change com.arh.adhitya | p c com.arh.adhitya
@@ -343,7 +343,7 @@ PkgInfo(){
     IFS=':' read -ra PKG <<< "$PKG"
     IFS='=' read -ra PKG <<< "${PKG[1]}"
     IFS='"' read -ra PKG <<< "${PKG[1]}"
-    echo -e "$MSGINFO Current name package $CYELLOW${PKG[1]}"
+    echo -e "$MSGINFO Current package name $CYELLOW${PKG[1]}"
 }
 
 
