@@ -185,6 +185,7 @@ nBitEnc(source, baseNBitLen, key) {
 }
 
 class Global {
+    // to compare long lat
   double calculateDistance(lat1, lon1, lat2, lon2) {
     var p = 0.017453292519943295;
     var c = cos;
