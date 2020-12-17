@@ -1,3 +1,12 @@
+/*
+module  : CONFIG
+creator : adhityarachmanh
+os      : darwin19
+created : Thu Dec 17 20:21:01 WIB 2020
+product : ARH
+version : v1.0
+*/
+
 part of 'app.dart';
 
 // CHANGE API URL | AVD DEFAULT LOCAL IP http://10.0.2.2:PORT
