@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'dart:math';
 import 'dart:math' show cos, sqrt, asin;
 import 'package:uuid/uuid.dart';
+import 'package:web_socket_channel/io.dart';
 part 'config.dart';
 part 'index.dart';
 part 'route.dart';
