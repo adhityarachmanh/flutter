@@ -29,10 +29,12 @@ dependencies:
   flutter_platform_widgets:
   flutter_secure_storage: ^3.3.5
   flutter_spinkit: ^4.1.2+1
+  flutter_svg: null
   uuid: ^2.2.2
   google_fonts: ^1.1.1
   http: ^0.12.2
   provider: ^4.3.2+2
+  web_socket_channel: ^1.1.0
 
 
 dev_dependencies:
