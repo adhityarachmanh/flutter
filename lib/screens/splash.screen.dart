@@ -34,7 +34,7 @@ class SplashScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text("SplashScreenWorks!",
-                style: textPrimary.copyWith(fontSize: 30)),
+                style: textPrimary.copyWith(fontSize: 25)),
             SizedBox(height: defaultMargin),
             Text(state.title, style: textPrimary.copyWith(fontSize: 20)),
           ],
