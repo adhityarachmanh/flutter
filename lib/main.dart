@@ -7,7 +7,8 @@ void main() {
     providers: [
       // GLobal Provider
       ChangeNotifierProvider.value(value: RouteFunction()),
-      ChangeNotifierProvider.value(value: IndexController())
+      ChangeNotifierProvider.value(value: WebsocketFunction()),
+      ChangeNotifierProvider.value(value: IndexController()),
     ],
     child: Main(),
   ));

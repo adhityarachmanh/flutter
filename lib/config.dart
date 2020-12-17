@@ -6,10 +6,10 @@ class Config {
   String websocket = "ws://";
   Map<String, dynamic> apiConfig = {
     "BASE": "res",
-    "API_URL": 'URL', 
+    "API_URL": 'URL',
     "VERSION": "v1.0",
     "FORMAT": "VERSION/BASE"
-  }; 
+  };
   String creator = 'CREATOR';
   String creatorName = "CREATOR_NAME";
   bool encryptionMode = false;

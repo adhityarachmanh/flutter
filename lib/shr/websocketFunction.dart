@@ -1,12 +1,21 @@
 part of '../app.dart';
 
 class WebsocketFunction with ChangeNotifier {
-  IOWebSocketChannel ws;
+  Map<String, IOWebSocketChannel> ws = {};
+  
+  connect({String chanel, String sid}) {
+    ws[chanel] = IOWebSocketChannel.connect("${config.websocket}/$sid");
+  }
 
-  websocketConnect() {
-    ws = IOWebSocketChannel.connect(config.websocket);
-    ws.stream.listen((message) {
-      print(message);
-    });
+  send({String chanel, Map<String, dynamic> data}) {
+    ws[chanel].sink.add(jsonEncode(data));
+  }
+
+  Stream<dynamic> stream({String chanel}) {
+    return ws[chanel].stream;
+  }
+
+  disconnect({String chanel}) {
+    ws.remove(chanel);
   }
 }
