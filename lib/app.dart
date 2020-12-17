@@ -15,6 +15,7 @@ part 'config.dart';
 part 'index.dart';
 part 'route.dart';
 part 'styling.dart';
+part 'shr/websocketFunction.dart';
 part 'shr/routeFunction.dart';
 part 'shr/global.dart';
 part 'shr/api.dart';
