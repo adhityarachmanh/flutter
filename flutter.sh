@@ -308,6 +308,11 @@ RegRoute(){
 
 
 PkgChange(){
+    if [ "$1" == "" ];then
+        echo -e "$MSGERROR Invalid format."
+        echo -e "$MSGINFO Example:$CYELLOW com.arh.adhitya$CRESET"
+        return
+    fi
     EXE=$0
     DIR=$(dirname "${EXE}")
     cd $DIR
@@ -331,11 +336,11 @@ PkgChange(){
     do
         PRGS=$((10*$CFC))
         if (( $PRGS > 100 ));then
-            PRGS=100
+            PRGS=$((100))
         else
             PRGS=$((20+$PRGS))
+            ProgressBar $PRGS "Change file [$CFC/${#FLIST[@]}]"
         fi
-        ProgressBar $PRGS "Change file [$CFC/${#FLIST[@]}]"
         sed -i -e "s+$CRNTPKG+$NEWPKG+g" $j
         if [ -f $j-e ];then
             rm $j-e
@@ -343,9 +348,8 @@ PkgChange(){
         CFC=$(($CFC+1))
         sleep .5
     done
-    ProgressBar 100 "Process Finish$CRESET"
+    ProgressBar 100 "$MSGSUCCESS Change package name $CYELLOW$CRNTPKG$CGREEN to $CYELLOW$NEWPKG$CRESET"
     flutter clean
-    echo -e "$MSGSUCCESS Change package name $CYELLOW$CRNTPKG$CGREEN to $CYELLOW$NEWPKG"
  
 }
 PkgInfo(){
