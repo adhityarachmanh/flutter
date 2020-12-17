@@ -10,8 +10,9 @@ class SplashScreen extends StatelessWidget {
     final globalDispatch = Provider.of<IndexController>(context, listen: false);
     // Route
     final route = Provider.of<RouteFunction>(context, listen: false);
-    final websocket = Provider.of<WebsocketFunction>(context, listen: false);
     final routeParams = route.getParams(context);
+    // Websocket
+    final websocket = Provider.of<WebsocketFunction>(context, listen: false);
     // Local controller
     final state = Provider.of<SplashController>(context);
     final dispatch = Provider.of<SplashController>(context, listen: false);

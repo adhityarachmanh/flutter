@@ -19,9 +19,9 @@ TERR="\e[1;40;97m"
 THIDE="\e[8m"
 
 PROGRESSBAR=true
-MSGINFO="$CBLUE[INFO]$CGREEN"
+MSGINFO="$CBLUE[INFO]$CGREEN   "
 MSGSUCCESS="$CGREEN[SUCCESS]$CGREEN"
-MSGERROR="$CRED[ERROR]$CGREEN"
+MSGERROR="$CRED[ERROR]$CGREEN  "
 MSGWARNING="$CYELLOW[WARNING]$CGREEN"
 
 
@@ -54,17 +54,26 @@ ProgressBar(){
     do
         bar+="#"
         bk+="\b"
-    done
-    echo -ne "${bar}${sp}${bk} [$1%] $2\r"
+    done  
+    
     if [ $1 == 100 ]; then
+        # sleep .5
+        echo -ne "$CGREEN${bar}${sp}${bk} [$1%] $2\r\033[K$2"
         echo -ne '\n'
+    else
+        # sleep .1
+        echo -ne "$CGREEN${bar}${sp}${bk} [$1%] $2\r"
     fi
-    sleep .1
 }
 
 GTemplate(){
     TNAME="$(tr '[:lower:]' '[:upper:]' <<< ${2})"
-    echo -e "$MSGINFO Get $CYELLOW$TNAME TEMPLATE$CGREEN from storage."
+    if [ "$TNAME" == "CREATOR" ];then
+        PROGRESSBAR=false
+        echo -e "$MSGINFO Genarate $CYELLOW$3$CGREEN Template."
+    else
+        PROGRESSBAR=true
+    fi
     ProgressBar 0 "Prepare Process"
     ProgressBar 30 "Grep Link"
     HTTPS=$(echo $LINES | curl "https://bit.ly/$1" -s | grep https )
@@ -75,7 +84,7 @@ GTemplate(){
     ProgressBar 75 "Get Template"
     if [ "$RESPONSE" == "200" ];then
         RESPONSE=$(curl $URL -s )
-        ProgressBar 100 "Process Finish"
+        ProgressBar 100 "$MSGSUCCESS Get $CYELLOW$TNAME TEMPLATE$CGREEN from storage."
         local RESPONSE="$RESPONSE"
     else
         echo -e "$MSGERROR Request failed with status code[$RESPONSE]"
@@ -144,7 +153,7 @@ CCreate(){
             fi
             MODULE_NAME="${i} ${TYPE}"
             MODULE_NAME="$(tr '[:lower:]' '[:upper:]' <<< ${MODULE_NAME})"
-            GTemplate $creatorEX "CREATOR"
+            GTemplate $creatorEX "CREATOR" "${SN}${TN}"
             TMPLOUT+="$RESPONSE"
             MARKCONTEXT="MODULE_NAME,CREATOR,DATE,PRODUCT,VERSION,OS"
             IFS=',' read -ra MARKCTX <<< "$MARKCONTEXT"
@@ -153,7 +162,7 @@ CCreate(){
                 TMPLOUT=$(echo "$TMPLOUT" | sed -e "s+_${j}_+${!j}+g")
             done
             GTemplate $TMPLTURL $TYPE
-            echo -e "$MSGINFO Create $CYELLOW${SN}${TN}$CGREEN template."
+            # echo -e "$MSGINFO Create $CYELLOW${SN}${TN}$CGREEN template."
             ProgressBar 0 "Prepare Process"
             ProgressBar 10 "Replace Template"
             CDB="$(tr '[:upper:]' '[:lower:]' <<< ${CDB})"
@@ -188,7 +197,7 @@ AppRegister(){
     InitLib
     echo -e "\npart '$1';" >> $(pwd)/$MODULE
     sed -i -e '/^[[:space:]]*$/d'  $(pwd)/$MODULE
-    ProgressBar 100 "Process Finish"
+    ProgressBar 100 "$MSGSUCCESS Create $CYELLOW${SN}${TN}$CGREEN template."
     echo -e "$MSGSUCCESS Template $CYELLOW$2$CGREEN successfully registered at $MODULE"
     if [ -f $(pwd)/app.dart-e ];then
         rm $(pwd)/app.dart-e
@@ -272,15 +281,15 @@ RegRoute(){
                 stty $old_stty_cfg
                 case $selection in
                     y ) 
-                        echo -e "$MSGINFO Register route."
+                        # echo -e "$MSGINFO Register route."
                         ProgressBar 0 "Prepare Process"
                         InitLib
                         ProgressBar 50 "Add Route"
                         sed -i -e "s+};++g" $(pwd)/$ROUTE
                         echo -e "$TEMPLATE" >> $(pwd)/$ROUTE
                         sed -i -e '/^[[:space:]]*$/d'  $(pwd)/$ROUTE
-                        ProgressBar 100 "Process Finish"
-                        echo -e "$MSGSUCCESS Route $CYELLOW'/${SN}Screen'$CGREEN successfully registered at $ROUTE.$CRESET"
+                        sleep .5
+                        ProgressBar 100 "$MSGSUCCESS Route $CYELLOW'/${SN}Screen'$CGREEN successfully registered at $ROUTE.$CRESET"
                         if [ -f $(pwd)/route.dart-e ];then
                             rm $(pwd)/route.dart-e
                         fi

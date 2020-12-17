@@ -3,8 +3,8 @@ part of '../app.dart';
 class WebsocketFunction with ChangeNotifier {
   Map<String, IOWebSocketChannel> ws = {};
   
-  connect({String chanel, String sid}) {
-    ws[chanel] = IOWebSocketChannel.connect("${config.websocket}/$sid");
+  connect({String chanel, String path}) {
+    ws[chanel] = IOWebSocketChannel.connect("${config.websocket}/$path");
   }
 
   send({String chanel, Map<String, dynamic> data}) {
