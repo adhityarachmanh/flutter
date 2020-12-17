@@ -293,7 +293,7 @@ class Global {
       'expired_time': DateTime.now().subtract(duration)
     };
     var newToken = enc(jsonEncode(data), 1, 6);
-    return "${headToken()} $newToken";
+    return newToken;
   }
 
   setToken(token) async {
