@@ -279,24 +279,29 @@ class Global {
   }
 
   getToken() async {
-    String value = await storage.read(key: enc('authtoken', 1, 6) + '.arh');
+    String key;
+    if (config.encryptionMode) {
+      key = enc('authtoken', 1, 6) + '.' + config.creator.toLowerCase();
+    }
+    String value = await storage.read(key: key);
     return value;
   }
 
-  createToken(String type, {String token = ""}) {
-    var _token;
-    _token = uuid();
-    if (token != "") {
-      _token = token;
-    }
-    var newToken = enc(jsonEncode({"token": _token, "type": type}), 1, 6);
+  createToken() {
+    Map<String, dynamic> data = {
+      'uuid': uuid(),
+      'expired_time': DateTime.now().toIso8601String()
+    };
+    var newToken = enc(jsonEncode(data), 1, 6);
     return "${headToken()} $newToken";
   }
 
   setToken(token) async {
-    await storage.write(
-        key: enc('authtoken', 1, 6) + '.' + config.creator.toLowerCase(),
-        value: token);
+    String key;
+    if (config.encryptionMode) {
+      key = enc('authtoken', 1, 6) + '.' + config.creator.toLowerCase();
+    }
+    await storage.write(key: key, value: token);
   }
 }
 
