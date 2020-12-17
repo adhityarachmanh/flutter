@@ -17,6 +17,7 @@ class ResponseAPI {
   ResponseAPI({@required this.s, this.msg, this.data, this.creator});
   factory ResponseAPI.fromJson(Map<String, dynamic> json) {
     if (config.encryptionMode && json['data'] != null) {
+      // decrypt encryption from API
       json['data'] = jsonDecode(global.dec(json['data'], 2, 6));
     }
     return ResponseAPI(
@@ -54,6 +55,7 @@ class Rest {
       "data": null,
     };
     if (config.encryptionMode) {
+      // encrypt request data to API
       newData['data'] = global.enc(jsonEncode(data), 2, 6);
     } else {
       newData['data'] = data;
