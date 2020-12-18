@@ -18,7 +18,7 @@ class IndexController with ChangeNotifier {
     notifyListeners();
   }
   
-  void onInit(){
-      print("init IndexController");
+  void onInit(BuildContext context){
+      print("Init IndexController");
   }
 }

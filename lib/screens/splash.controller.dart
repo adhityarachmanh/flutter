@@ -10,6 +10,8 @@ version : v1.0
 part of '../app.dart';
 
 class SplashController with ChangeNotifier {
-    final String title = "SplashControllerWorks!";
-
+  final String title = "SplashControllerWorks!";
+  void onInit(BuildContext context){
+      print("Init SplashController");
+  }
 }
