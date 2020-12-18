@@ -58,6 +58,7 @@ ProgressBar(){
     
     if [ $1 == 100 ]; then
         # sleep .5
+        bar=""
         echo -ne "$CGREEN${bar}${sp}${bk} [$1%] $2\r\033[K$2"
         echo -ne '\n'
     else
