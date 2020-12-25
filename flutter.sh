@@ -221,11 +221,11 @@ PackageHelp(){
 
     Available Schematic:
         change (c)   change package name
-        info   (w)   info current package name                         
+        info   (i)   info current package name                         
     
     Example:
         package  change com.arh.adhitya | p c com.arh.adhitya
-        package  info
+        package  info                   | p i 
     """)
     echo -e "$TEMPLATE"
 }
