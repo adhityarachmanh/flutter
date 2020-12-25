@@ -18,7 +18,7 @@ CRESET="\x1b[39;49;00m"
 TERR="\e[1;40;97m"
 THIDE="\e[8m"
 
-PROGRESSBAR=true
+PROGRESSBAR=false
 MSGINFO="$CBLUE[INFO]$CGREEN   "
 MSGSUCCESS="$CGREEN[SUCCESS]$CGREEN"
 MSGERROR="$CRED[ERROR]$CGREEN  "
@@ -272,7 +272,7 @@ RegRoute(){
                         sed -i -e "s+};++g" $(pwd)/$ROUTE
                         echo -e "$TEMPLATE" >> $(pwd)/$ROUTE
                         sed -i -e '/^[[:space:]]*$/d'  $(pwd)/$ROUTE
-                        sleep .5
+                        # sleep .5
                         ProgressBar 100 "$MSGSUCCESS Route $CYELLOW'/${SN}Screen'$CGREEN successfully registered at $ROUTE.$CRESET"
                         if [ -f $(pwd)/route.dart-e ];then
                             rm $(pwd)/route.dart-e
@@ -314,7 +314,7 @@ PkgChange(){
     ProgressBar 0 "Prepare Process"
     FLIST=($(grep -HRl "${PKG[1]}" $DIR))
     ProgressBar 0 "${#FLIST[@]} File Found"
-    sleep 1
+    # sleep 1
     CFC=1
     for j in "${FLIST[@]}"
     do
@@ -330,7 +330,7 @@ PkgChange(){
             rm $j-e
         fi
         CFC=$(($CFC+1))
-        sleep .5
+        # sleep .5
     done
     ProgressBar 100 "$MSGSUCCESS Change package name $CYELLOW$CRNTPKG$CGREEN to $CYELLOW$NEWPKG$CRESET"
     flutter clean
