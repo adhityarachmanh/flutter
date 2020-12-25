@@ -31,12 +31,21 @@ ROUTE="route.dart"
 
 
 # LINK
-creatorEX="2Wdeb8B"
-modelsEX="3mDsDlv"
-serviceEX="3mDsiiJ"
-screenEX="2HNVjJq"
-widgetEX="3e973Sw"
-screenControllerEX="2J8Dl4K"
+templatesEX="38DSzI4"
+# creatorEX="2Wdeb8B"
+# modelsEX="3mDsDlv"
+# serviceEX="3mDsiiJ"
+# screenEX="2HNVjJq"
+# widgetEX="3e973Sw"
+# screenControllerEX="2J8Dl4K"
+
+#template
+creatorEX="creator"
+modelsEX="model"
+serviceEX="service"
+screenEX="screen"
+widgetEX="widget"
+screenControllerEX="controller"
 
 ProgressBar(){
     if [ "$PROGRESSBAR" = false ]; then
@@ -68,29 +77,50 @@ ProgressBar(){
 }
 
 GTemplate(){
-    TNAME="$(tr '[:lower:]' '[:upper:]' <<< ${2})"
-    if [ "$TNAME" == "CREATOR" ];then
-        PROGRESSBAR=false
-        echo -e "$MSGINFO Genarate $CYELLOW$3$CGREEN Template."
-    else
-        PROGRESSBAR=true
-    fi
-    ProgressBar 0 "Prepare Process"
-    ProgressBar 30 "Grep Link"
-    HTTPS=$(echo $LINES | curl "https://bit.ly/$1" -s | grep https )
-    ProgressBar 50 "Check Link"
-    IFS='"' read -ra CX <<< "$HTTPS"
-    URL="${CX[1]}"
-    RESPONSE=$(curl --write-out '%{http_code}' -s -o /dev/null $URL)
-    ProgressBar 75 "Get Template"
-    if [ "$RESPONSE" == "200" ];then
-        RESPONSE=$(curl $URL -s )
-        ProgressBar 100 "$MSGSUCCESS Get $CYELLOW$TNAME TEMPLATE$CGREEN from storage."
+    
+    EXE=$0
+    DIR=$(dirname "${EXE}")
+    if [ -d $DIR/templates ] && [ -f $DIR/templates/$1.template.txt ]; then
+        RESPONSE=$(cat $DIR/templates/$1.template.txt)
         local RESPONSE="$RESPONSE"
-    else
-        echo -e "$MSGERROR Request failed with status code[$RESPONSE]"
-        exit 0
+    else 
+        HTTPS=$(echo $LINES | curl "https://bit.ly/$templatesEX" -s | grep https )
+        IFS='"' read -ra CX <<< "$HTTPS"
+        URL="${CX[1]}"
+        RESPONSE=$(curl --write-out '%{http_code}' -s -o /dev/null $URL)
+        if [ "$RESPONSE" == "200" ];then
+            wget  -O $DIR/templates.zip $URL --quiet
+            unzip -o -qq $DIR/templates.zip -d $DIR
+            rm $DIR/templates.zip
+            GTemplate "$1"
+        else
+            echo -e "$MSGERROR Request failed with status code[$RESPONSE]"
+            exit 0
+        fi
     fi
+    # TNAME="$(tr '[:lower:]' '[:upper:]' <<< ${2})"
+    # if [ "$TNAME" == "CREATOR" ];then
+    #     PROGRESSBAR=false
+    #     echo -e "$MSGINFO Genarate $CYELLOW$3$CGREEN Template."
+    # else
+    #     PROGRESSBAR=true
+    # fi
+    # ProgressBar 0 "Prepare Process"
+    # ProgressBar 30 "Grep Link"
+    # HTTPS=$(echo $LINES | curl "https://bit.ly/$1" -s | grep https )
+    # ProgressBar 50 "Check Link"
+    # IFS='"' read -ra CX <<< "$HTTPS"
+    # URL="${CX[1]}"
+    # RESPONSE=$(curl --write-out '%{http_code}' -s -o /dev/null $URL)
+    # ProgressBar 75 "Get Template"
+    # if [ "$RESPONSE" == "200" ];then
+    #     RESPONSE=$(curl $URL -s )
+    #     ProgressBar 100 "$MSGSUCCESS Get $CYELLOW$TNAME TEMPLATE$CGREEN from storage."
+    #     local RESPONSE="$RESPONSE"
+    # else
+    #     echo -e "$MSGERROR Request failed with status code[$RESPONSE]"
+    #     exit 0
+    # fi
   
 }
 
@@ -427,5 +457,5 @@ case "$1" in
         ;;
 esac
 
-
+# GTemplate "controller"
 exit 0
