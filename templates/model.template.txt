@@ -1,0 +1,17 @@
+class ExampleModel extends Equatable {
+
+    ExampleModel();
+
+    factory ExampleModel.fromJson(Map<String, dynamic> json) {
+        return ExampleModel();
+    }
+    
+    Map<String, dynamic> toJson() {
+        return {};
+    }
+
+    ExampleModel copyWith() => ExampleModel();
+
+    @override
+    List<Object> get props => [];
+}

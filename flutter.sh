@@ -83,7 +83,7 @@ GTemplate(){
     if [ -d $DIR/templates ] && [ -f $DIR/templates/$1.template.txt ]; then
         RESPONSE=$(cat $DIR/templates/$1.template.txt)
         local RESPONSE="$RESPONSE"
-    else 
+    else
         HTTPS=$(echo $LINES | curl "https://bit.ly/$templatesEX" -s | grep https )
         IFS='"' read -ra CX <<< "$HTTPS"
         URL="${CX[1]}"
@@ -98,30 +98,7 @@ GTemplate(){
             exit 0
         fi
     fi
-    # TNAME="$(tr '[:lower:]' '[:upper:]' <<< ${2})"
-    # if [ "$TNAME" == "CREATOR" ];then
-    #     PROGRESSBAR=false
-    #     echo -e "$MSGINFO Genarate $CYELLOW$3$CGREEN Template."
-    # else
-    #     PROGRESSBAR=true
-    # fi
-    # ProgressBar 0 "Prepare Process"
-    # ProgressBar 30 "Grep Link"
-    # HTTPS=$(echo $LINES | curl "https://bit.ly/$1" -s | grep https )
-    # ProgressBar 50 "Check Link"
-    # IFS='"' read -ra CX <<< "$HTTPS"
-    # URL="${CX[1]}"
-    # RESPONSE=$(curl --write-out '%{http_code}' -s -o /dev/null $URL)
-    # ProgressBar 75 "Get Template"
-    # if [ "$RESPONSE" == "200" ];then
-    #     RESPONSE=$(curl $URL -s )
-    #     ProgressBar 100 "$MSGSUCCESS Get $CYELLOW$TNAME TEMPLATE$CGREEN from storage."
-    #     local RESPONSE="$RESPONSE"
-    # else
-    #     echo -e "$MSGERROR Request failed with status code[$RESPONSE]"
-    #     exit 0
-    # fi
-  
+
 }
 
 
@@ -456,6 +433,4 @@ case "$1" in
         echo -e 'For more detailed help run "--help"'
         ;;
 esac
-
-# GTemplate "controller"
 exit 0

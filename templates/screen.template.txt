@@ -1,0 +1,36 @@
+class ExampleScreen extends StatelessWidget {
+  static final routeName = "/ExampleScreen";
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    // Global controller
+    final globalState = Provider.of<IndexController>(context);
+    final globalDispatch = Provider.of<IndexController>(context, listen: false);
+    // Route
+    final route = Provider.of<RouteFunction>(context, listen: false);
+    final routeParams = route.getParams(context);
+    // Websocket
+    final websocket = Provider.of<WebsocketFunction>(context, listen: false);
+    // Local controller
+    final state = Provider.of<ExampleController>(context);
+    final dispatch = Provider.of<ExampleController>(context, listen: false);
+    // Init controller
+    dispatch.onInit(context);
+    
+    return Scaffold(
+      body: Container(
+        width: SizeConfig.screenWidth,
+        height: SizeConfig.screenHeight,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+            Text("ExampleScreenWorks!",style: textPrimary.copyWith(fontSize:25)),
+            SizedBox(height:defaultMargin),
+            Text(state.title,style: textPrimary.copyWith(fontSize:20)),
+          ],)
+        ),
+      ),
+    );
+  }
+}

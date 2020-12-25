@@ -1,0 +1,21 @@
+class ExampleWidget extends StatelessWidget {
+  ExampleWidget();
+  @override
+  Widget build(BuildContext context) {
+    // Global controller
+    final globalState = Provider.of<IndexController>(context);
+    final globalDispatch = Provider.of<IndexController>(context, listen: false);
+    // Route
+    final route = Provider.of<RouteFunction>(context, listen: false);
+    return Container(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("ExampleWidgetWorks!",style: textPrimary.copyWith(fontSize: 25))
+          ],
+        ),
+      ),
+    );
+  }
+}

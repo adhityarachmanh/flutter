@@ -1,0 +1,7 @@
+class ExampleController with ChangeNotifier {
+    final String title = "ExampleControllerWorks!";
+   
+    void onInit(BuildContext context){
+    	print("Init ExampleController");
+    }
+}

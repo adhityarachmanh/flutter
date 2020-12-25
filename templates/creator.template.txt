@@ -1,0 +1,8 @@
+/*
+module  : _MODULE_NAME_
+creator : _CREATOR_
+os      : _OS_
+created : _DATE_
+product : _PRODUCT_
+version : _VERSION_
+*/
