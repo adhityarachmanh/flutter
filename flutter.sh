@@ -230,11 +230,31 @@ PackageHelp(){
     echo -e "$TEMPLATE"
 }
 
+AppLabelHelp(){
+    TEMPLATE=$(echo -e """
+    $CGREEN \bApplication label.$CRESET
+    usage: label <schematic> [options]
+    arguments:
+        $CGREEN"schematic"$CRESET
+            The schematic or collection:schematic to application label.
+
+    Available Schematic:
+        change (c)   change label application
+        info   (i)   info current label application                        
+    
+    Example:
+        label  change "Application Label" | l c "Application Label"
+        label  info                       | l i 
+    """)
+    echo -e "$TEMPLATE"
+}
+
 ShowHelp(){
     echo -e """
     Available Commands:
         generate (g) Generates files based on a schematic.
-        package (p) Info package and change package.
+        package  (p) Info package and change package.
+        label    (l) Application Label and  application label.
     """
 }
 ShowVersion(){
@@ -301,18 +321,24 @@ PkgChange(){
     DIR=$(dirname "${EXE}")
     cd $DIR
     NEWPKG="$1"
-    PKG=$(grep -r 'package=' $DIR)
+    PKG=$(grep -r 'package=' $DIR/android)
     IFS=':' read -ra PKG <<< "$PKG"
     IFS='=' read -ra PKG <<< "${PKG[1]}"
     IFS='"' read -ra PKG <<< "${PKG[1]}"
-    CRNTPKG="${PKG[1]}"
-    if [ "$CRNTPKG" == "$NEWPKG" ];then
-        echo -e "$MSGERROR Current package name $CYELLOW$CRNTPKG$CGREEN same with new package name $CYELLOW$NEWPKG"
+    ANDROCRNTPKG="${PKG[1]}"
+    PKG=$(grep -r 'PRODUCT_BUNDLE_IDENTIFIER =' $DIR/ios)
+    IFS='=' read -ra PKG <<< "$PKG"
+    IFS='"' read -ra PKG <<< "${PKG[1]}"
+    IFS=';' read -ra PKG <<< "${PKG[0]}"
+    IOSCRNTPKG="$PKG"
+    if [ "$ANDROCRNTPKG" == "$NEWPKG" ] && [ "$IOSCRNTPKG" == "$NEWPKG" ];then
+        echo -e "$MSGERROR Current package name $CYELLOW$IOSCRNTPKG$CGREEN same with new package name $CYELLOW$NEWPKG"
         return
     fi
+    CRNTPKG="$PKG"
     echo -e "$MSGINFO Change package name."
     ProgressBar 0 "Prepare Process"
-    FLIST=($(grep -HRl "${PKG[1]}" $DIR))
+    FLIST=($(grep -HRl $CRNTPKG $DIR/android && grep -HRl $CRNTPKG $DIR/ios))
     ProgressBar 0 "${#FLIST[@]} File Found"
     # sleep 1
     CFC=1
@@ -325,7 +351,7 @@ PkgChange(){
             PRGS=$((20+$PRGS))
             ProgressBar $PRGS "Change file [$CFC/${#FLIST[@]}]"
         fi
-        sed -i -e "s+$CRNTPKG+$NEWPKG+g" $j
+        sed -i -e "s|$CRNTPKG|$NEWPKG|g" "$j"
         if [ -f $j-e ];then
             rm $j-e
         fi
@@ -333,7 +359,7 @@ PkgChange(){
         # sleep .5
     done
     ProgressBar 100 "$MSGSUCCESS Change package name $CYELLOW$CRNTPKG$CGREEN to $CYELLOW$NEWPKG$CRESET"
-    flutter clean
+    # flutter clean
  
 }
 PkgInfo(){
@@ -344,10 +370,34 @@ PkgInfo(){
     IFS=':' read -ra PKG <<< "$PKG"
     IFS='=' read -ra PKG <<< "${PKG[1]}"
     IFS='"' read -ra PKG <<< "${PKG[1]}"
-    echo -e "$MSGINFO Current package name $CYELLOW${PKG[1]}"
+    echo -e "$MSGINFO Android package name $CYELLOW${PKG[1]}"
+    PKG=$(grep -r 'PRODUCT_BUNDLE_IDENTIFIER =' $DIR/ios)
+    IFS='=' read -ra PKG <<< "$PKG"
+    IFS='"' read -ra PKG <<< "${PKG[1]}"
+    IFS=';' read -ra PKG <<< "${PKG[0]}"
+    echo -e "$MSGINFO IOS package name $CYELLOW${PKG[0]}"
 }
 
+AppLabelInfo(){
+    echo -e "info  app label"
+    EXE=$0
+    DIR=$(dirname "${EXE}")
+    cd $DIR
+    PKG=$(grep -r 'android:label' $DIR/android)
+    IFS='=' read -ra PKG <<< "${PKG}"
+    IFS='"' read -ra PKG <<< "${PKG[1]}"
+    echo -e "$MSGINFO Android label $CYELLOW${PKG[1]}"
+    PKG=$(grep -r ${PKG[1]} $DIR/ios)
+    IFS=':' read -ra PKG <<< "$PKG"
+    IFS='>' read -ra PKG <<< "${PKG[1]}"
+    IFS='<' read -ra PKG <<< "${PKG[1]}"
+    echo -e "$MSGINFO IOS label $CYELLOW${PKG[0]}"
 
+}
+
+AppLabelChange(){
+    echo -e "change  app label"
+}
 
 Package(){
     case "$1" in
@@ -359,6 +409,23 @@ Package(){
             ;;
         --help|--h|help|h)
             PackageHelp
+            ;;
+        *)
+            echo -e 'For more detailed help run "package --help"'
+            ;;
+    esac
+}
+
+AppLabel(){
+    case "$1" in
+        change|c)
+            AppLabelChange $2
+            ;;
+        info|i)
+            AppLabelInfo
+            ;;
+        --help|--h|help|h)
+            AppLabelHelp
             ;;
         *)
             echo -e 'For more detailed help run "package --help"'
@@ -398,6 +465,9 @@ case "$1" in
         ;;
     package|p)
         Package $2 $3
+        ;;
+    label|l)
+        AppLabel $2 $3
         ;;
     --help|--h|help|h)
         ShowHelp
