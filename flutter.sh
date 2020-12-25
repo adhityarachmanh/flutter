@@ -340,7 +340,7 @@ PkgInfo(){
     EXE=$0
     DIR=$(dirname "${EXE}")
     cd $DIR
-    PKG=$(grep -r 'package=' $DIR)
+    PKG=$(grep -r 'package=' $DIR/android)
     IFS=':' read -ra PKG <<< "$PKG"
     IFS='=' read -ra PKG <<< "${PKG[1]}"
     IFS='"' read -ra PKG <<< "${PKG[1]}"
