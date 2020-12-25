@@ -358,8 +358,15 @@ PkgChange(){
         CFC=$(($CFC+1))
         # sleep .5
     done
+    SPLOLD="$CRNTPKG"
+    SPLNEW="$NEWPKG"
+    IFS='.' read -ra SPLOLD <<< "$SPLOLD"
+    IFS='.' read -ra SPLNEW <<< "$SPLNEW"
+    mv $DIR/android/app/src/main/kotlin/${SPLOLD[0]} $DIR/android/app/src/main/kotlin/${SPLNEW[0]}
+    mv $DIR/android/app/src/main/kotlin/${SPLNEW[0]}/${SPLOLD[1]} $DIR/android/app/src/main/kotlin/${SPLNEW[0]}/${SPLNEW[1]}
+    mv $DIR/android/app/src/main/kotlin/${SPLNEW[0]}/${SPLNEW[1]}/${SPLOLD[2]} $DIR/android/app/src/main/kotlin/${SPLNEW[0]}/${SPLNEW[1]}/${SPLNEW[2]}
     ProgressBar 100 "$MSGSUCCESS Change package name $CYELLOW$CRNTPKG$CGREEN to $CYELLOW$NEWPKG$CRESET"
-    # flutter clean
+    flutter clean
  
 }
 PkgInfo(){
