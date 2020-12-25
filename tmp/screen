@@ -14,8 +14,6 @@ class ExampleScreen extends StatelessWidget {
     // Local controller
     final state = Provider.of<ExampleController>(context);
     final dispatch = Provider.of<ExampleController>(context, listen: false);
-    // Init controller
-    dispatch.onInit(context);
     
     return Scaffold(
       body: Container(

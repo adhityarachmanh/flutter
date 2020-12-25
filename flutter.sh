@@ -29,17 +29,8 @@ MSGWARNING="$CYELLOW[WARNING]$CGREEN"
 MODULE="app.dart"
 ROUTE="route.dart"
 
-
-# LINK
-templatesEX="38DSzI4"
-# creatorEX="2Wdeb8B"
-# modelsEX="3mDsDlv"
-# serviceEX="3mDsiiJ"
-# screenEX="2HNVjJq"
-# widgetEX="3e973Sw"
-# screenControllerEX="2J8Dl4K"
-
 #template
+template="tmp"
 creatorEX="creator"
 modelsEX="model"
 serviceEX="service"
@@ -77,26 +68,11 @@ ProgressBar(){
 }
 
 GTemplate(){
-    
     EXE=$0
     DIR=$(dirname "${EXE}")
-    if [ -d $DIR/templates ] && [ -f $DIR/templates/$1.template.txt ]; then
-        RESPONSE=$(cat $DIR/templates/$1.template.txt)
+    if [ -d $DIR/$template ] && [ -f $DIR/$template/$1 ]; then
+        RESPONSE=$(cat $DIR/$template/$1)
         local RESPONSE="$RESPONSE"
-    else
-        HTTPS=$(echo $LINES | curl "https://bit.ly/$templatesEX" -s | grep https )
-        IFS='"' read -ra CX <<< "$HTTPS"
-        URL="${CX[1]}"
-        RESPONSE=$(curl --write-out '%{http_code}' -s -o /dev/null $URL)
-        if [ "$RESPONSE" == "200" ];then
-            wget  -O $DIR/templates.zip $URL --quiet
-            unzip -o -qq $DIR/templates.zip -d $DIR
-            rm $DIR/templates.zip
-            GTemplate "$1"
-        else
-            echo -e "$MSGERROR Request failed with status code[$RESPONSE]"
-            exit 0
-        fi
     fi
 
 }
