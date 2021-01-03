@@ -185,7 +185,7 @@ nBitEnc(source, baseNBitLen, key) {
 }
 
 class Global {
-    // to compare long lat
+  // to compare long lat
   double calculateDistance(lat1, lon1, lat2, lon2) {
     var p = 0.017453292519943295;
     var c = cos;
@@ -273,17 +273,7 @@ class Global {
     }
   }
 
-  headToken() {
-    var hT = config.creator;
-    return (hT.toUpperCase().substring(0, 1) +
-        hT.toLowerCase().substring(1, hT.length));
-  }
-
-  getToken() async {
-    String key;
-    if (config.encryptionMode) {
-      key = enc('authtoken', 1, 6) + '.' + config.creator.toLowerCase();
-    }
+  getToken({String key = "authtoken"}) async {
     String value = await storage.read(key: key);
     return value;
   }
@@ -297,11 +287,7 @@ class Global {
     return newToken;
   }
 
-  setToken(token) async {
-    String key;
-    if (config.encryptionMode) {
-      key = enc('authtoken', 1, 6) + '.' + config.creator.toLowerCase();
-    }
+  setToken(token, {String key = "authtoken"}) async {
     await storage.write(key: key, value: token);
   }
 }
