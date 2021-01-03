@@ -290,6 +290,10 @@ class Global {
   setToken(token, {String key = "authtoken"}) async {
     await storage.write(key: key, value: token);
   }
+
+  removeToken({String key = "authtoken"}) async {
+    await storage.delete(key: key);
+  }
 }
 
 final global = new Global();
