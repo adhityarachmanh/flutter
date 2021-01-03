@@ -281,7 +281,7 @@ class Global {
   createToken({Duration duration = const Duration(minutes: 15)}) {
     Map<String, dynamic> data = {
       'uuid': uuid(),
-      'expired_time': DateTime.now().subtract(duration)
+      'expired_time': DateTime.now().subtract(duration).toIso8601String()
     };
     var newToken = enc(jsonEncode(data), 1, 6);
     return newToken;
