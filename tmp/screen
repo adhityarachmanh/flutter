@@ -1,5 +1,43 @@
-class ExampleScreen extends StatelessWidget {
+class ExampleScreen extends StatefulWidget {
   static final routeName = "/ExampleScreen";
+
+  @override
+  _ExampleScreenState createState() => _ExampleScreenState();
+}
+
+class _ExampleScreenState extends State<ExampleScreen> {
+  final TrackingScrollController _trackingScrollController = TrackingScrollController();
+
+  @override
+  void dispose() {
+    _trackingScrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Stack(
+      children: [
+        SafeAreaWidget(
+          safearea: Palette.primaryColor,
+          background: Palette.lightColor,
+        ),
+        ResponsiveWidget(
+          mobile:_ExampleScreenMobile(scrollController: _trackingScrollController),
+          tablet:_ExampleScreenTablet(scrollController: _trackingScrollController),
+          desktop:_ExampleScreenDesktop(scrollController: _trackingScrollController),
+        ),
+      ],
+    ));
+  }
+}
+
+class _ExampleScreenMobile extends StatelessWidget {
+  final TrackingScrollController scrollController;
+
+  const _ExampleScreenMobile({Key key, @required this.scrollController})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -14,21 +52,103 @@ class ExampleScreen extends StatelessWidget {
     // Local controller
     final state = Provider.of<ExampleController>(context);
     final dispatch = Provider.of<ExampleController>(context, listen: false);
-    
-    return Scaffold(
-      body: Container(
-        width: SizeConfig.screenWidth,
-        height: SizeConfig.screenHeight,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-            Text("ExampleScreenWorks!",style: textPrimary.copyWith(fontSize:25)),
-            SizedBox(height:defaultMargin),
-            Text(state.title,style: textPrimary.copyWith(fontSize:20)),
-          ],)
-        ),
-      ),
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+          child: Container(
+            height: SizeConfig.screenHeight,
+            child: Center(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("ExampleMobileScreen!",style: MyText.primary(font: MyFont.montserrat).copyWith(fontSize: 25)),
+                SizedBox(height: defaultMargin),
+                Text(state.title, style: MyText.primary(font: MyFont.montserrat).copyWith(fontSize: 25)),
+              ],
+            )),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class _ExampleScreenTablet extends StatelessWidget {
+  final TrackingScrollController scrollController;
+
+  const _ExampleScreenTablet({Key key, @required this.scrollController})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    // Global controller
+    final globalState = Provider.of<IndexController>(context);
+    final globalDispatch = Provider.of<IndexController>(context, listen: false);
+    // Route
+    final route = Provider.of<RouteFunction>(context, listen: false);
+    final routeParams = route.getParams(context);
+    // Websocket
+    final websocket = Provider.of<WebsocketFunction>(context, listen: false);
+    // Local controller
+    final state = Provider.of<ExampleController>(context);
+    final dispatch = Provider.of<ExampleController>(context, listen: false);
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+          child: Container(
+            height: SizeConfig.screenHeight,
+            child: Center(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("ExampleTabletScreen!",style: MyText.primary(font: MyFont.montserrat).copyWith(fontSize: 25)),
+                SizedBox(height: defaultMargin),
+                Text(state.title, style: MyText.primary(font: MyFont.montserrat).copyWith(fontSize: 25)),
+              ],
+            )),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class _ExampleScreenDesktop extends StatelessWidget {
+  final TrackingScrollController scrollController;
+
+  const _ExampleScreenDesktop({Key key, @required this.scrollController})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    // Global controller
+    final globalState = Provider.of<IndexController>(context);
+    final globalDispatch = Provider.of<IndexController>(context, listen: false);
+    // Route
+    final route = Provider.of<RouteFunction>(context, listen: false);
+    final routeParams = route.getParams(context);
+    // Websocket
+    final websocket = Provider.of<WebsocketFunction>(context, listen: false);
+    // Local controller
+    final state = Provider.of<ExampleController>(context);
+    final dispatch = Provider.of<ExampleController>(context, listen: false);
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+          child: Container(
+            height: SizeConfig.screenHeight,
+            child: Center(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("ExampleDesktopScreen!",style: MyText.primary(font: MyFont.montserrat).copyWith(fontSize: 25)),
+                SizedBox(height: defaultMargin),
+                Text(state.title, style: MyText.primary(font: MyFont.montserrat).copyWith(fontSize: 25)),
+              ],
+            )),
+          ),
+        )
+      ],
     );
   }
 }

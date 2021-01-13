@@ -11,20 +11,42 @@ part of 'app.dart';
 
 double defaultMargin = 25;
 
-Color primaryColor = HexColor.fromHex("#191923");
-Color secondaryColor = HexColor.fromHex("#1975df");
-Color lightColor = HexColor.fromHex("#FFFFFF");
+class Palette {
+  // COLOR
+  static Color primaryColor = HexColor.fromHex("#191923");
+  static Color secondaryColor = HexColor.fromHex("#1975df");
+  static Color lightColor = HexColor.fromHex("#FFFFFF");
+
+  static Color successColor = HexColor.fromHex("#2ecc71");
+  static Color warningColor = HexColor.fromHex("#f39c12");
+  static Color errorColor = HexColor.fromHex("#e74c3c");
+}
+
+class MyFont {
+  // FONT
+  static TextStyle montserrat =
+      GoogleFonts.montserrat(fontStyle: FontStyle.normal);
+}
+
+class MyText {
+  // TEXT
+  static TextStyle light({@required TextStyle font}) {
+    return font.copyWith(
+        color: Palette.lightColor, fontWeight: FontWeight.w500);
+  }
+
+  static TextStyle primary({@required TextStyle font}) {
+    return font.copyWith(
+        color: Palette.primaryColor, fontWeight: FontWeight.w500);
+  }
+
+  static TextStyle secondary({@required TextStyle font}) {
+    return font.copyWith(
+        color: Palette.secondaryColor, fontWeight: FontWeight.w500);
+  }
+}
 
 
-Color successColor = HexColor.fromHex("#2ecc71");
-Color warningColor = HexColor.fromHex("#f39c12");
-Color errorColor = HexColor.fromHex("#e74c3c");
-
-TextStyle fontVolkorn = GoogleFonts.vollkorn(fontStyle: FontStyle.normal);
-
-TextStyle textLight = fontVolkorn.copyWith(color: lightColor, fontWeight: FontWeight.w500);
-TextStyle textPrimary = fontVolkorn.copyWith(color: primaryColor, fontWeight: FontWeight.w500);
-TextStyle textSecondary = fontVolkorn.copyWith(color: secondaryColor, fontWeight: FontWeight.w500);
 
 class SizeConfig {
   static MediaQueryData _mediaQueryData;

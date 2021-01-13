@@ -10,6 +10,7 @@ version : v1.0
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'app.dart';
+import 'app.dart';
 
 void main() {
   runApp(MultiProvider(
@@ -30,7 +31,7 @@ class Main extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-            primaryColor: primaryColor,
+            primaryColor: Palette.primaryColor,
             pageTransitionsTheme: PageTransitionsTheme(builders: {
               TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
               TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),

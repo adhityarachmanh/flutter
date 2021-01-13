@@ -31,6 +31,8 @@ part 'shr/global.dart';
 part 'shr/api.dart';
 part 'extensions/hex.extension.dart';
 part 'models/user.model.dart';
+part 'widgets/safearea.widget.dart';
+part 'widgets/responsive.widget.dart';
 part 'services/auth.service.dart';
 part 'screens/splash.screen.dart';
 part 'screens/splash.controller.dart';
