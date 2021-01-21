@@ -13,8 +13,12 @@ double defaultMargin = 25;
 
 class Palette {
   // COLOR
-  static Color primaryColor = HexColor.fromHex("#191923");
-  static Color secondaryColor = HexColor.fromHex("#1975df");
+  static Color primaryColor = HexColor.fromHex("#662C8B");
+  static Color secondaryColor = HexColor.fromHex("#B83B5E");
+  static Color accentColor = HexColor.fromHex("#FBBB00");
+
+  static const Color grayColor = Colors.grey;
+  static Color darkColor = HexColor.fromHex("#191923");
   static Color lightColor = HexColor.fromHex("#FFFFFF");
 
   static Color successColor = HexColor.fromHex("#2ecc71");
@@ -26,13 +30,18 @@ class MyFont {
   // FONT
   static TextStyle montserrat =
       GoogleFonts.montserrat(fontStyle: FontStyle.normal);
+  static TextStyle muli = GoogleFonts.muli(fontStyle: FontStyle.normal);
 }
 
 class MyText {
   // TEXT
-  static TextStyle light({@required TextStyle font}) {
+  static TextStyle light({TextStyle font}) {
     return font.copyWith(
         color: Palette.lightColor, fontWeight: FontWeight.w500);
+  }
+
+  static TextStyle dark({TextStyle font}) {
+    return font.copyWith(color: Palette.darkColor, fontWeight: FontWeight.w500);
   }
 
   static TextStyle primary({@required TextStyle font}) {
@@ -45,8 +54,6 @@ class MyText {
         color: Palette.secondaryColor, fontWeight: FontWeight.w500);
   }
 }
-
-
 
 class SizeConfig {
   static MediaQueryData _mediaQueryData;
