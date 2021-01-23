@@ -18,7 +18,7 @@ CRESET="\x1b[39;49;00m"
 TERR="\e[1;40;97m"
 THIDE="\e[8m"
 
-PROGRESSBAR=true
+PROGRESSBAR=false
 MSGINFO="$CBLUE[INFO]$CGREEN   "
 MSGSUCCESS="$CGREEN[SUCCESS]$CGREEN"
 MSGERROR="$CRED[ERROR]$CGREEN  "
@@ -127,17 +127,25 @@ CCreate(){
     for i in "${CTX[@]}"
     do
         if [  ${#CTX[@]} == $IDX ]; then
-            SN="$(tr '[:lower:]' '[:upper:]' <<< ${i:0:1})${i:1}"
-            CHECKCLASS="$(grep -r "class ${SN}${TN}" $DIR)"
+            # SN="$(tr '[:lower:]' '[:upper:]' <<< ${i:0:1})${i:1}"
+            SN=""
+            IFS='.' read -ra SNS <<< "${i}"
+            for j in "${SNS[@]}"
+            do
+                SN+="$(tr '[:lower:]' '[:upper:]' <<< ${j:0:1})${j:1}"
+            done
+            CLASSNAME="${SN}${TN}"
+            CHECKCLASS="$(grep -r "class ${CLASSNAME}" $DIR)"
             IFS=':' read -ra CLS <<< "$CHECKCLASS"
             CLS=$(echo ${CLS[0]} | sed -e "s+${DIR}++g" )
             if [ "$CHECKCLASS" != "" ]; then
-                echo -e "$MSGERROR Duplicate class name $CGREEN${SN}${TN} at $CYELLOW$CLS."
+                echo -e "$MSGERROR Duplicate class name $CGREEN${CLASSNAME} at $CYELLOW$CLS."
                 return
             fi
-            MODULE_NAME="${i} ${TYPE}"
+            MODULE_NAME=$(echo ${i//'.'/' '})
+            MODULE_NAME="${MODULE_NAME} ${TYPE}"
             MODULE_NAME="$(tr '[:lower:]' '[:upper:]' <<< ${MODULE_NAME})"
-            GTemplate $creatorEX "CREATOR" "${SN}${TN}"
+            GTemplate $creatorEX "CREATOR" "${CLASSNAME}"
             TMPLOUT+="$RESPONSE"
             MARKCONTEXT="MODULE_NAME,CREATOR,DATE,PRODUCT,VERSION,OS"
             IFS=',' read -ra MARKCTX <<< "$MARKCONTEXT"
@@ -157,7 +165,7 @@ CCreate(){
             echo -e "$TMPLOUT" >> $(pwd)/"${i}"."${TYPE}".dart
             CONTEXT="$(tr '[:upper:]' '[:lower:]' <<< ${CONTEXT})"
             ProgressBar 50 "Register Template"
-            AppRegister  "${CONTEXT}"."${TYPE}".dart "${SN}${TN}"
+            AppRegister  "${CONTEXT}"."${TYPE}".dart "${CLASSNAME}"
         else
             if [ ! -d $(pwd)/$i ]; then
                 mkdir $(pwd)/$i
