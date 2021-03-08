@@ -74,7 +74,7 @@ class Rest {
       {Map<String, dynamic> headers}) async {
     var request = http.MultipartRequest('POST', Uri.parse(routeAPI(routeName)));
     request.files.add(http.MultipartFile(
-        'file', file.readAsBytes().asStream(), file.lengthSync(),
+        'files', file.readAsBytes().asStream(), file.lengthSync(),
         filename: basename(file.path).split("/").last));
     var response = await request.send();
     if (response.statusCode == 200) return response;
@@ -83,11 +83,9 @@ class Rest {
   Future fUpload(String routeName, File file,
       {Map<String, dynamic> data, Map<String, dynamic> headers}) async {
     var request = http.MultipartRequest('POST', Uri.parse(routeAPI(routeName)));
-    data.forEach((key, value) {
-      request.fields[key] = value;
-    });
+    request.fields['data'] = jsonEncode(data);
     request.files.add(http.MultipartFile(
-        'file', file.readAsBytes().asStream(), file.lengthSync(),
+        'files', file.readAsBytes().asStream(), file.lengthSync(),
         filename: basename(file.path).split("/").last));
     var response = await request.send();
     if (response.statusCode == 200) return response;
