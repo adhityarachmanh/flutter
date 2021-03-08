@@ -16,10 +16,6 @@ class ResponseAPI {
   String creator;
   ResponseAPI({@required this.s, this.msg, this.data, this.creator});
   factory ResponseAPI.fromJson(Map<String, dynamic> json) {
-    if (config.encryptionMode && json['data'] != null) {
-      // decrypt encryption from API
-      json['data'] = jsonDecode(global.dec(json['data'], 2, 6));
-    }
     return ResponseAPI(
       s: json['s'],
       msg: json['msg'],
@@ -42,26 +38,9 @@ class Rest {
       format = format.replaceAll(key, config.apiConfig[key]);
     }
     format += "/$routeName";
-    if (config.encryptionMode) {
-      format = global.enc(format, 1, 6) + "." + config.creator.toLowerCase();
-    }
+
     url += format;
     return url;
-  }
-
-  static dynamic encryptData(data) {
-    Map<String, dynamic> newData = {
-      "creator": config.creatorName,
-      "data": null,
-    };
-    if (config.encryptionMode) {
-      // encrypt request data to API
-      newData['data'] = global.enc(jsonEncode(data), 2, 6);
-    } else {
-      newData['data'] = data;
-    }
-
-    return jsonEncode(newData);
   }
 
   Future<Map<String, String>> headerAsConfig(Map<String, String> _headers,
@@ -87,7 +66,7 @@ class Rest {
       middleware = false}) async {
     var _headers = headerAsConfig(headers, middleware: middleware);
     var response = await http.post(routeAPI(routeName),
-        headers: await _headers, body: encryptData(data));
+        headers: await _headers, body: jsonEncode(data));
     if (response.statusCode == 200) return response;
   }
 

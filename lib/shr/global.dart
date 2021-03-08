@@ -137,7 +137,7 @@ genKey(keyType) {
 }
 
 getSvrKey() {
-  var tmp = myValue[config.creator];
+  var tmp = myValue[config.copyright['Creator']];
   return nBitDec(tmp, null, null);
 }
 

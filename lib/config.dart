@@ -18,14 +18,19 @@ FORMAT API EX: VERSION/BASE v.1.0/res || BASE res (key from apiConfig)
 class Config {
   String websocket = "ws://";
   Map<String, dynamic> apiConfig = {
-    "BASE": "res",
+    "res": "res",
     "API_URL": 'URL',
     "VERSION": "v1.0",
-    "FORMAT": "VERSION/BASE"
+    "FORMAT": "res"
   };
-  String creator = 'CREATOR';
-  String creatorName = "CREATOR_NAME";
-  bool encryptionMode = false;
+  Map<String, dynamic> copyright = {
+    "Creator":"",
+    "ProductId": "",
+    "Product": "",
+    "Description": "",
+    "Copyright": "",
+    "Version": "1.0"
+  };
 }
 
 final config = new Config();
