@@ -38,12 +38,14 @@ class CardCategoryWidget extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(6.0))),
               child: Stack(children: [
                 Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(6.0)),
-                        image: DecorationImage(
-                          image: NetworkImage(img),
-                          fit: BoxFit.cover,
-                        ))),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                    image: DecorationImage(
+                      image: NetworkImage(img),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
                 Container(
                     decoration: BoxDecoration(
                         color: Colors.black45,

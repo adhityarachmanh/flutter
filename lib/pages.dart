@@ -5,6 +5,7 @@ os      : darwin19
 created : Thu Dec 17 20:21:01 WIB 2020
 */
 
+import 'package:app/controllers/auth.controller.dart';
 import 'package:app/pages/auth/signin.page.dart';
 import 'package:app/pages/dashboard.page.dart';
 import 'package:app/pages/privacyandpolicy.page.dart';
