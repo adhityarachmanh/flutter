@@ -1,0 +1,89 @@
+name: app
+description: A new Flutter project.
+version: 1.0.0+1
+
+publish_to: 'none'
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  android_intent: ^2.0.2
+  cached_network_image: ^3.1.0
+  connectivity: ^3.0.6
+  cupertino_icons: ^1.0.0
+  device_info: ^2.0.0
+  flutter_native_timezone: ^1.0.10
+  flutter_platform_widgets: ^1.9.5
+  flutter_slidable: ^0.6.0
+  flutter_svg: ^0.22.0
+  fluttertoast: ^8.0.8
+  geolocator: ^7.4.0
+  hive: ^2.0.4
+  hive_flutter: ^1.1.0
+  image_cropper: ^1.4.1
+  image_picker: ^0.8.4
+  image_slider: ^1.0.2
+  infinite_scroll_pagination: ^3.1.0
+  mime: ^1.0.0
+  photo_view: ^0.12.0
+  pull_to_refresh: ^2.0.0
+  url_launcher: ^6.0.9
+  get: ^4.3.8
+  # http: ^0.13.3
+  # provider: ^6.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: ^2.1.1 # "flutter packages pub run build_runner build" generate TypeAdapter HIVE 
+  flutter_launcher_icons: ^0.9.1
+  flutter_native_splash: ^1.2.1
+  hive_generator: ^1.1.0
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/svg/
+    - assets/icons/
+
+  fonts:
+    # - family: Gilroy
+    #   fonts:
+    #     - asset: assets/fonts/Gilroy/Gilroy-ExtraBold.otf
+    #     - asset: assets/fonts/Gilroy/Gilroy-Light.otf
+    #       weight: 700
+    # - family: OpenSans
+    #   fonts:
+    #     - asset: assets/fonts/OpenSans/OpenSans-Regular.ttf
+    #     - asset: assets/fonts/OpenSans/OpenSans-Light.ttf
+    #     - asset: assets/fonts/OpenSans/OpenSans-Bold.ttf
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto/Roboto-Regular.ttf
+        - asset: assets/fonts/Roboto/Roboto-Medium.ttf
+        - asset: assets/fonts/Roboto/Roboto-bold.ttf
+
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/Nunito/Nunito-Regular.ttf
+        - asset: assets/fonts/Nunito/Nunito-Light.ttf
+        - asset: assets/fonts/Nunito/Nunito-bold.ttf
+
+# running 'flutter pub run flutter_native_splash:create'
+# NOTE:running untuk ekseskusi ubah splash_scren
+flutter_native_splash:
+  color: "#FFFFFF"
+  # image: "assets/images/splash.png"
+
+# running 'flutter pub run flutter_launcher_icons:main'
+# NOTE:running untuk ekseskusi ubah icon
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/logo.png"
