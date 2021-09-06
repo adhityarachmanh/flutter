@@ -1,24 +1,15 @@
-import 'package:get/get.dart';
+import 'package:http/http.dart' as client;
 
-class ServerService extends GetConnect {
-  final String title = "ServerService";
+class RemoteServices {
   static Future login(String username, String password) async {
     try {} catch (e) {}
   }
 
-  Future silentLogin(Map data) async {
+  static Future silentLogin(Map data) async {
     try {} catch (e) {}
   }
 
-  static Future getEmployee(int userId) async {
-    try {} catch (e) {}
-  }
-
-  static Future updateData(int userId, Map<String, dynamic> data) async {
-    try {} catch (e) {}
-  }
-
-  static Future getImage(String imageURL) async {
+  static Future getData() async {
     try {} catch (e) {}
   }
 }
