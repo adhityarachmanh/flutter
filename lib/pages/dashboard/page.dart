@@ -11,10 +11,17 @@ import 'package:flutter/material.dart';
 import 'package:app/widgets/label.widget.dart';
 import 'package:get/get.dart';
 
-class DashboardPage extends GetView<DashboardController> {
+class DashboardPage extends StatefulWidget {
   static final routeName = "/DashboardPage";
+
+  @override
+  _DashboardPageState createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<DashboardController>();
     return Scaffold(
       // appBar: AppBar(),
       body: Center(
