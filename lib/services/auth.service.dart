@@ -13,13 +13,13 @@ import 'package:app/models/user.model.dart';
 class AuthBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<AuthController>(() => AuthController());
+    Get.lazyPut<AuthService>(() => AuthService());
     print("AuthBinding");
   }
 }
 
-class AuthController extends GetxController {
-  final String title = "AuthProvider";
+class AuthService extends GetxController {
+  final String title = "AuthService";
 
   late UserModel? _user;
   UserModel? get user => _user;

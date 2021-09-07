@@ -13,7 +13,7 @@ import 'package:app/pages/splash/controller.dart';
 import 'package:app/pages/welcome/controller.dart';
 import 'package:app/pages/welcome/page.dart';
 import 'package:app/pages/splash/page.dart';
-import 'package:app/providers/auth.provider.dart';
+import 'package:app/services/auth.service.dart';
 import 'package:get/get.dart';
 
 List<GetPage<dynamic>> pages = [

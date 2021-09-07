@@ -28,7 +28,7 @@ class SplashController extends GetxController {
     if (authorization != null) {
       try {
         //API
-        // Get.find<AuthController>().setUser(data);
+        // Get.find<AuthService>().setUser(data);
       } catch (e) {}
     } else {
       Get.offNamed(WelcomePage.routeName);
