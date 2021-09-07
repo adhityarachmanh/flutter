@@ -57,31 +57,32 @@ class SplashScreen extends GetView<AuthController> {
                     child: Image.asset("assets/icons/logo.png"),
                   ),
                   Container(
-                      margin: EdgeInsets.only(top: 25),
-                      height: 30,
-                      child: GetX<AuthController>(
-                        builder: (value) => Visibility(
-                          visible: value.isLoading,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                height: 20,
-                                width: 20,
-                                child: LoadingIndicatorWidget(),
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              LabelWidget(
-                                "Check Authentication...",
-                                fontSize: 16,
-                                color: Palette.colorBlack,
-                              )
-                            ],
-                          ),
+                    margin: EdgeInsets.only(top: 25),
+                    height: 30,
+                    child: GetX<AuthController>(
+                      builder: (value) => Visibility(
+                        visible: value.isLoading,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 20,
+                              width: 20,
+                              child: LoadingIndicatorWidget(),
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            LabelWidget(
+                              "Check Authentication...",
+                              fontSize: 16,
+                              color: Palette.colorBlack,
+                            ),
+                          ],
                         ),
-                      )),
+                      ),
+                    ),
+                  ),
                   Spacer(),
                   Padding(
                     padding: const EdgeInsets.all(20.0),
