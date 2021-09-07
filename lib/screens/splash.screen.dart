@@ -12,20 +12,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends GetView<AuthController> {
   static final routeName = "/SplashScreen";
   Future<void> initialize() async {
     Box box = Hive.box('GUEST');
 
-    box.deleteAll(box.keys);
-    Timer(Duration(seconds: 3), () async {
-      bool privacyAndPolicy = box.get('privacyAndPolicy', defaultValue: false);
-      if (privacyAndPolicy) {
-        await Get.find<AuthController>().silentLogin();
-      } else {
-        Get.offNamed(PrivacyAndPolicyScreen.routeName);
-      }
-    });
+    // box.deleteAll(box.keys);
+    Timer(
+      Duration(seconds: 3),
+      () async {
+        var privacyAndPolicy = box.get('privacyAndPolicy', defaultValue: false);
+        if (privacyAndPolicy) {
+          await controller.silentLogin();
+        } else {
+          Get.offNamed(PrivacyAndPolicyScreen.routeName);
+        }
+      },
+    );
   }
 
   @override

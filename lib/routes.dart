@@ -15,9 +15,7 @@ List<GetPage<dynamic>> pages = [
   GetPage(
     name: SplashScreen.routeName,
     page: () => SplashScreen(),
-    bindings: [
-      AuthBinding(),
-    ],
+    binding: AuthBinding(),
   ),
   GetPage(
     name: PrivacyAndPolicyScreen.routeName,

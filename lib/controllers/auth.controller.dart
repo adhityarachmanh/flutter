@@ -14,6 +14,11 @@ class AuthController extends GetxController {
   UserModel get user => _user.value;
   set user(UserModel value) => this._user.value = value;
 
+  @override
+  void onInit() {
+    super.onInit();
+  }
+
   Future<void> silentLogin() async {
     Box box = Hive.box('USER');
     var authorization = box.get('authorization');
@@ -29,12 +34,14 @@ class AuthController extends GetxController {
           Get.offNamed(WelcomeScreen.routeName);
         },
       );
+      // Get.offNamed(WelcomeScreen.routeName);
     }
   }
 
   void signOut() async {
     Box box = Hive.box('USER');
     box.deleteAll(box.keys);
+    user = UserModel();
     Get.offNamed(WelcomeScreen.routeName);
   }
 }
