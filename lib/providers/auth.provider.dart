@@ -14,60 +14,25 @@ class AuthBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<AuthController>(() => AuthController());
+    print("AuthBinding");
   }
 }
 
 class AuthController extends GetxController {
   final String title = "AuthProvider";
 
-  late List<String> _errors = [];
-  List<String> get errors => _errors;
-  late UserModel _user;
-  UserModel get user => _user;
+  late UserModel? _user;
+  UserModel? get user => _user;
 
-  void setError(List<String> list) async {
-    _errors = list;
-    update();
-  }
-
-  void userInfo(UserModel payload) async {
+  void setUser(UserModel? payload) async {
     _user = payload;
     update();
-  }
-
-  Future<void> signIn(
-    String username,
-    String password,
-  ) async {
-    List<String> errorList = [];
-    if (username == "") errorList.add("username");
-    if (password == "") errorList.add("password");
-    setError(errorList);
-    if (errorList.length != 0) return;
-    try {
-      //API
-
-    } catch (e) {
-      Get.snackbar("Error!", "Server Error!");
-    }
   }
 
   void signOut() async {
     Box box = Hive.box('USER');
     box.deleteAll(box.keys);
+    setUser(null);
     Get.offNamed(WelcomePage.routeName);
-  }
-
-  Future<void> silentLogin() async {
-    Box box = Hive.box('USER');
-    var authorization = box.get('authorization');
-    if (authorization != null) {
-      try {
-        //API
-
-      } catch (e) {}
-    } else {
-      Get.offNamed(WelcomePage.routeName);
-    }
   }
 }
