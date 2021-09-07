@@ -19,7 +19,6 @@ dependencies:
   flutter_platform_widgets: ^1.9.5
   flutter_slidable: ^0.6.0
   flutter_svg: ^0.22.0
-  fluttertoast: ^8.0.8
   geolocator: ^7.4.0
   hive: ^2.0.4
   hive_flutter: ^1.1.0
@@ -44,7 +43,6 @@ dev_dependencies:
   hive_generator: ^1.1.0
 
 flutter:
-
   uses-material-design: true
 
   assets:
@@ -53,22 +51,6 @@ flutter:
     - assets/icons/
 
   fonts:
-    # - family: Gilroy
-    #   fonts:
-    #     - asset: assets/fonts/Gilroy/Gilroy-ExtraBold.otf
-    #     - asset: assets/fonts/Gilroy/Gilroy-Light.otf
-    #       weight: 700
-    # - family: OpenSans
-    #   fonts:
-    #     - asset: assets/fonts/OpenSans/OpenSans-Regular.ttf
-    #     - asset: assets/fonts/OpenSans/OpenSans-Light.ttf
-    #     - asset: assets/fonts/OpenSans/OpenSans-Bold.ttf
-    - family: Roboto
-      fonts:
-        - asset: assets/fonts/Roboto/Roboto-Regular.ttf
-        - asset: assets/fonts/Roboto/Roboto-Medium.ttf
-        - asset: assets/fonts/Roboto/Roboto-bold.ttf
-
     - family: Nunito
       fonts:
         - asset: assets/fonts/Nunito/Nunito-Regular.ttf
