@@ -1,5 +1,5 @@
 
-package mobile.initial.app
+package com.init.app
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -465,29 +465,29 @@ class MainActivity: FlutterActivity() {
     echo -e "$AndroidPkgText" >> $(pwd)/MainActivity.kt
     cd $OLDPath
     AndroidPkgText=$(cat $AndroidManifestFile)
-    AndroidPkgText=$(echo "\n$AndroidPkgText" | sed -e "s+$AndroidPkg+${NewPkgName}+g")
+    AndroidPkgText=$(echo "$AndroidPkgText" | sed -e "s+$AndroidPkg+${NewPkgName}+g")
     rm $AndroidManifestFile
     echo -e "$AndroidPkgText" >> $AndroidManifestFile
 
     AndroidPkgText=$(cat $AndroidManifestFileDebug)
-    AndroidPkgText=$(echo "\n$AndroidPkgText" | sed -e "s+$AndroidPkg+${NewPkgName}+g")
+    AndroidPkgText=$(echo "$AndroidPkgText" | sed -e "s+$AndroidPkg+${NewPkgName}+g")
     rm $AndroidManifestFileDebug
     echo -e "$AndroidPkgText" >> $AndroidManifestFileDebug
 
     AndroidPkgText=$(cat $AndroidManifestFileProfile)
-    AndroidPkgText=$(echo "\n$AndroidPkgText" | sed -e "s+$AndroidPkg+${NewPkgName}+g")
+    AndroidPkgText=$(echo "$AndroidPkgText" | sed -e "s+$AndroidPkg+${NewPkgName}+g")
     rm $AndroidManifestFileProfile
     echo -e "$AndroidPkgText" >> $AndroidManifestFileProfile
 
     AndroidPkgText=$(cat $AndroidBuildGradlePkgFile)
-    AndroidPkgText=$(echo "\n$AndroidPkgText" | sed -e "s+$AndroidPkg+${NewPkgName}+g")
+    AndroidPkgText=$(echo "$AndroidPkgText" | sed -e "s+$AndroidPkg+${NewPkgName}+g")
     rm $AndroidBuildGradlePkgFile
     echo -e "$AndroidPkgText" >> $AndroidBuildGradlePkgFile
 }
 
 IOSChangePkgFunction(){
     IOSPkgText=$(cat $IOSPkgFile)
-    IOSPkgText=$(echo "\n$IOSPkgText" | sed -e "s+$IOSPkg+${NewPkgName}+g")
+    IOSPkgText=$(echo "$IOSPkgText" | sed -e "s+$IOSPkg+$NewPkgName+g")
     rm $IOSPkgFile
     echo -e "$IOSPkgText" >> $IOSPkgFile
 }
@@ -495,27 +495,28 @@ IOSChangePkgFunction(){
 ChangePackage(){
     PackageAndroidAndIOS
     read -p 'New Package Name: ' NewPkgName
-    selection=
-    until [ "$selection" = "n" ]; do
-        echo -e "$CYELLOW\bDo you want to change package name to  $CGREEN\b$NewPkgName $CYELLOW? (y/n)$CRESET"
-        old_stty_cfg=$(stty -g)
-        stty raw -echo
-        selection=$( while ! head -c 1 | grep -i '[yn]' ;do true ;done )
-        stty $old_stty_cfg
-        case $selection in
-            y ) 
-                IOSChangePkgFunction
-                AndroidChangePkgFunction
-                flutter clean
-                flutter pub get
-                echo -e "$MSGWARNING Package name has changed.$CRESET"
-                exit 0  
-            ;;
-            *)
-                echo -e "$MSGWARNING Package name has not changed.$CRESET"
-            ;;
-        esac
-    done
+    # selection=
+    # until [ "$selection" = "n" ]; do
+    #     echo -e "$CYELLOW\bDo you want to change package name to  $CGREEN\b$NewPkgName $CYELLOW? (y/n)$CRESET"
+    #     old_stty_cfg=$(stty -g)
+    #     stty raw -echo
+    #     selection=$( while ! head -c 1 | grep -i '[yn]' ;do true ;done )
+    #     stty $old_stty_cfg
+    #     case $selection in
+    #         y ) 
+               
+    #         ;;
+    #         *)
+    #             echo -e "$MSGWARNING Package name has not changed.$CRESET"
+    #         ;;
+    #     esac
+    # done
+    IOSChangePkgFunction
+    AndroidChangePkgFunction
+    flutter clean
+    flutter pub get
+    echo -e "$MSGWARNING Package name has changed.$CRESET"
+    exit 0  
 }
 
 PackageInfo(){
@@ -527,7 +528,7 @@ PackageInfo(){
 Package(){
     case "$1" in
         change|c)
-            ChangePackage
+            ChangePackage $2
             ;;
         info|i)
             PackageInfo
@@ -598,27 +599,33 @@ IOSChangeApplicationNameFunction(){
 ChangeAppName(){
     AppNameAndroidAndIOS
     read -p 'New Application Name: ' NewAn
-    selection=
-    until [ "$selection" = "n" ]; do
-        echo -e "$CYELLOW\bDo you want to change application name to  $CGREEN\b$NewAn $CYELLOW? (y/n)$CRESET"
-        old_stty_cfg=$(stty -g)
-        stty raw -echo 
-        selection=$( while ! head -c 1 | grep -i '[yn]' ;do true ;done )
-        stty $old_stty_cfg
-        case $selection in
-            y ) 
-                IOSChangeApplicationNameFunction
-                AndroidChangeApplicationNameFunction
-                flutter clean
-                flutter pub get
-                echo -e "$MSGWARNING Application name has changed.$CRESET"
-                exit 0  
-            ;;
-            *)
-                echo -e "$MSGWARNING Application name has not changed.$CRESET"
-            ;;
-        esac
-    done
+    IOSChangeApplicationNameFunction
+    AndroidChangeApplicationNameFunction
+    flutter clean
+    flutter pub get
+    echo -e "$MSGWARNING Application name has changed.$CRESET"
+    exit 0  
+    # selection=
+    # until [ "$selection" = "n" ]; do
+    #     echo -e "$CYELLOW\bDo you want to change application name to  $CGREEN\b$NewAn $CYELLOW? (y/n)$CRESET"
+    #     old_stty_cfg=$(stty -g)
+    #     stty raw -echo 
+    #     selection=$( while ! head -c 1 | grep -i '[yn]' ;do true ;done )
+    #     stty $old_stty_cfg
+    #     case $selection in
+    #         y ) 
+    #             IOSChangeApplicationNameFunction
+    #             AndroidChangeApplicationNameFunction
+    #             flutter clean
+    #             flutter pub get
+    #             echo -e "$MSGWARNING Application name has changed.$CRESET"
+    #             exit 0  
+    #         ;;
+    #         *)
+    #             echo -e "$MSGWARNING Application name has not changed.$CRESET"
+    #         ;;
+    #     esac
+    # done
 }
 
 AppNameInfo(){
