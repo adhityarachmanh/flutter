@@ -82,8 +82,9 @@ class TextFieldWidget extends StatelessWidget {
         keyboardType: textInputType,
         textCapitalization: textCapitalization,
         style: new TextStyle(
-            fontSize: (fontSize != null ? fontSize : 14.0),
-            fontWeight: fontWeight),
+          fontSize: (fontSize != null ? fontSize : 14.0),
+          fontWeight: fontWeight,
+        ),
         maxLines: maxLine != null ? maxLine : 1,
         obscureText: obscureText,
         onChanged: onChanged,
