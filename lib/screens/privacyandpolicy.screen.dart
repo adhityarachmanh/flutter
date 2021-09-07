@@ -1,23 +1,25 @@
-/*
-module  : PRIVACYANDPOLICY SCREEN
-creator : adhityarachmanh
-os      : darwin20
-created : Tue Mar  9 20:33:27 WIB 2021
-product : ${Config.application}*/
-
 import 'dart:io';
-import 'package:app/pages/privacyandpolicy/controller.dart';
+
+import 'package:app/config.dart';
+import 'package:app/constants/colors.dart';
+import 'package:app/screens/welcome.screen.dart';
+import 'package:app/utils/size_config..dart';
 import 'package:app/widgets/button.widget.dart';
 import 'package:app/widgets/copyright.widget.dart';
+import 'package:app/widgets/label.widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:app/config.dart';
-import 'package:app/utils/size_config..dart';
-import 'package:app/widgets/label.widget.dart';
+import 'package:hive/hive.dart';
 
-class PrivacyAndPolicyPage extends GetView<PrivacyAndPolicyController> {
-  static final routeName = "/PrivacyAndPolicyPage";
+class PrivacyAndPolicyScreen extends StatelessWidget {
+  static final routeName = "/PrivacyAndPolicyScreen";
+  void aggree() {
+    Box box = Hive.box('GUEST');
+    box.put("privacyAndPolicy", true);
+    Get.offNamed(WelcomeScreen.routeName);
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
@@ -28,6 +30,7 @@ class PrivacyAndPolicyPage extends GetView<PrivacyAndPolicyController> {
     );
     SizeConfig().init(context);
     return Scaffold(
+      backgroundColor: Palette.colorWhite,
       appBar: AppBar(
         automaticallyImplyLeading: true,
         backgroundColor: Colors.transparent,
@@ -206,7 +209,7 @@ class PrivacyAndPolicyPage extends GetView<PrivacyAndPolicyController> {
                   backgroundColor: Theme.of(context).primaryColor,
                   fontColor: Colors.white,
                   height: 45,
-                  onPressed: () => controller.aggree(),
+                  onPressed: () => aggree(),
                 ),
               ],
             ),

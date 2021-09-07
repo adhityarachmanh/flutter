@@ -1,22 +1,19 @@
-/*
-module  : WELCOME SCREEN
-creator : Adhitya
-os      : msys
-created : Sat, Aug 14, 2021  7:49:17 PM
-*/
-
-import 'package:app/pages/welcome/controller.dart';
+import 'package:app/constants/colors.dart';
 import 'package:app/widgets/copyright.widget.dart';
-import 'package:flutter/material.dart';
 import 'package:app/widgets/label.widget.dart';
-import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 
-class WelcomePage extends GetView<WelcomeController> {
-  static final routeName = "/WelcomePage";
+class WelcomeScreen extends StatelessWidget {
+  static final routeName = "/WelcomeScreen";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(),
+      backgroundColor: Palette.colorWhite,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        brightness: Brightness.dark,
+        elevation: 0.0,
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -25,7 +22,7 @@ class WelcomePage extends GetView<WelcomeController> {
               "Welcome Screen!",
               fontSize: 18,
             ),
-            LabelWidget(controller.title)
+            LabelWidget("Welcome Screen!")
           ],
         ),
       ),

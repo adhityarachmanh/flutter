@@ -5,39 +5,26 @@ os      : darwin19
 created : Thu Dec 17 20:21:01 WIB 2020
 */
 
-import 'package:app/pages/Dashboard/controller.dart';
-import 'package:app/pages/dashboard/page.dart';
-import 'package:app/pages/privacyandpolicy/controller.dart';
-import 'package:app/pages/privacyandpolicy/page.dart';
-import 'package:app/pages/splash/controller.dart';
-import 'package:app/pages/welcome/controller.dart';
-import 'package:app/pages/welcome/page.dart';
-import 'package:app/pages/splash/page.dart';
-import 'package:app/services/auth.service.dart';
+import 'package:app/controllers/bindings/auth.binding.dart';
+import 'package:app/screens/privacyandpolicy.screen.dart';
+import 'package:app/screens/splash.screen.dart';
+import 'package:app/screens/welcome.screen.dart';
 import 'package:get/get.dart';
 
 List<GetPage<dynamic>> pages = [
   GetPage(
-    name: SplashPage.routeName,
-    page: () => SplashPage(),
-    binding: SplashBinding(),
+    name: SplashScreen.routeName,
+    page: () => SplashScreen(),
     bindings: [
       AuthBinding(),
     ],
   ),
   GetPage(
-    name: PrivacyAndPolicyPage.routeName,
-    page: () => PrivacyAndPolicyPage(),
-    binding: PrivacyAndPolicyBinding(),
+    name: PrivacyAndPolicyScreen.routeName,
+    page: () => PrivacyAndPolicyScreen(),
   ),
   GetPage(
-    name: DashboardPage.routeName,
-    page: () => DashboardPage(),
-    binding: DashboardBinding(),
-  ),
-  GetPage(
-    name: WelcomePage.routeName,
-    page: () => WelcomePage(),
-    binding: WelcomeBinding(),
+    name: WelcomeScreen.routeName,
+    page: () => WelcomeScreen(),
   ),
 ];

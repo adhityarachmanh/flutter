@@ -4,12 +4,12 @@ creator : adhityarachmanh
 os      : darwin19
 created : Thu May  6 12:21:22 WIB 2021
 */
+import 'package:app/screens/splash.screen.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:app/routes.dart';
-import 'package:app/pages/splash/page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,8 +45,9 @@ class Main extends StatelessWidget {
             900: const Color(0xff9c27b0),
           },
         ),
+        canvasColor: Colors.transparent,
       ),
-      initialRoute: SplashPage.routeName,
+      initialRoute: SplashScreen.routeName,
       getPages: pages,
     );
   }
