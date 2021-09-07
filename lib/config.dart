@@ -23,8 +23,8 @@ class Config {
       "Basic ${base64Encode(utf8.encode('$username:$password'))}";
   static String domainDevelopment = "";
   static String domainProduction = "";
-  static String? domain = {
+  static String domain = {
     Environment.development: Config.domainDevelopment,
     Environment.production: Config.domainProduction,
-  }[mode];
+  }[mode]!;
 }
