@@ -8,6 +8,7 @@ created : Thu Mar 18 19:24:34 WIB 2021
 import 'package:app/widgets/label.widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:get/get.dart';
 
 class ConfirmationDialogWidget extends StatelessWidget {
   final String title;
@@ -45,14 +46,18 @@ class ConfirmationDialogWidget extends StatelessWidget {
             confirmTextButton,
             style: textStyle,
           ),
-          onPressed: () => Navigator.pop(context, true),
+          onPressed: () => Get.back(
+            result: true,
+          ),
         ),
         PlatformDialogAction(
           child: LabelWidget(
             cancelTextButton,
             style: textStyle,
           ),
-          onPressed: () => Navigator.pop(context, false),
+          onPressed: () => Get.back(
+            result: false,
+          ),
         ),
       ],
     );

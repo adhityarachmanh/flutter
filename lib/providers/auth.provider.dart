@@ -9,7 +9,6 @@ import 'package:app/pages/welcome/page.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:app/models/user.model.dart';
-import 'package:app/widgets/toast.widget.dart';
 
 class AuthBinding extends Bindings {
   @override
@@ -49,7 +48,7 @@ class AuthController extends GetxController {
       //API
 
     } catch (e) {
-      showToast("Server Error!");
+      Get.snackbar("Error!", "Server Error!");
     }
   }
 

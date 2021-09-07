@@ -10,6 +10,7 @@ import 'package:app/utils/image_picker.dart';
 import 'package:app/widgets/label.widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ChoseImageDialogWidget extends StatelessWidget {
@@ -30,9 +31,8 @@ class ChoseImageDialogWidget extends StatelessWidget {
           children: <Widget>[
             // ButtonRoundedWidget(label: "test",onPressed: ()=>onImageChange('test'),)
             TextButton(
-              onPressed: () async => Navigator.pop(
-                context,
-                await imagePicker(ImageSource.camera, base64: base64),
+              onPressed: () async => Get.back(
+                result: await imagePicker(ImageSource.camera, base64: base64),
               ),
               child: Row(
                 children: <Widget>[
@@ -67,9 +67,8 @@ class ChoseImageDialogWidget extends StatelessWidget {
               ),
             ),
             TextButton(
-              onPressed: () async => Navigator.pop(
-                context,
-                await imagePicker(
+              onPressed: () async => Get.back(
+                result: await imagePicker(
                   ImageSource.gallery,
                   base64: base64,
                 ),
