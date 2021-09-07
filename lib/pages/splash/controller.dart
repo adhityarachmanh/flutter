@@ -14,7 +14,8 @@ class SplashBinding extends Bindings {
 
 class SplashController extends GetxController {
   final String title = "Splash Controller!";
-  bool _isLoading = true;
+
+  bool _isLoading = false;
   bool get isLoading => _isLoading;
 
   void setLoading(status) {
@@ -25,13 +26,15 @@ class SplashController extends GetxController {
   Future<void> silentLogin() async {
     Box box = Hive.box('USER');
     var authorization = box.get('authorization');
+    setLoading(true);
     if (authorization != null) {
-      try {
-        //API
-        // Get.find<AuthService>().setUser(data);
-      } catch (e) {}
+      //API
+      // Get.find<AuthService>().setUser(data);
     } else {
-      Get.offNamed(WelcomePage.routeName);
+      Future.delayed(Duration(seconds: 3), () {
+        Get.offNamed(WelcomePage.routeName);
+        setLoading(false);
+      });
     }
   }
 
