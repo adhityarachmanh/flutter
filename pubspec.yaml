@@ -32,7 +32,7 @@ dependencies:
   pull_to_refresh: ^2.0.0
   url_launcher: ^6.0.9
   get: ^4.3.8
-  http: ^0.13.3
+  # http: ^0.13.3
   # provider: ^6.0.0
 
 dev_dependencies:

@@ -5,7 +5,7 @@ os      : darwin20
 created : Sun May  9 15:19:54 WIB 2021
 */
 
-import 'package:app/pages/welcome.page.dart';
+import 'package:app/pages/welcome/page.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:app/models/user.model.dart';
