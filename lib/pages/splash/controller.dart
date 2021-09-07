@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:app/pages/PrivacyAndPolicy/page.dart';
-import 'package:app/providers/auth.controller.dart';
+import 'package:app/providers/auth.provider.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 
