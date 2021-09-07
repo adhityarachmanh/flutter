@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 
-class RemoteServices extends GetConnect {
+class RemoteService extends GetConnect {
   static Future login(String username, String password) async {
     var response = await post(Uri.parse(""), body: {});
     try {} catch (e) {}
